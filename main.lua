@@ -1,6 +1,5 @@
 require"Blox2D"
---
-print("lol")
+
 function love.draw()
     Blox2D.draw()
     love.graphics.print("Hello World!", 100, 100)
@@ -15,6 +14,8 @@ function love.quit()
 end
 
 function love.load()
+    table.print(math)
+
     local vec1 = Vector2.new(10, 0)
     local vec2 = Vector2.new(0, 10)
     

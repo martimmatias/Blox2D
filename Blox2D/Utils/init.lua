@@ -5,6 +5,7 @@ UDim2 = require(MyPath.."udim2")
 Connection = require(MyPath.."connection")
 ScriptSignal = require(MyPath.."scriptsignal")
 require(MyPath.."table")
+require(MyPath.."math")
 
 ---@diagnostic disable-next-line: lowercase-global
 typeof = function(value)
