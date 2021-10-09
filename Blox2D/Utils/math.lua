@@ -7,8 +7,9 @@ math.clamp = function(x, min, max)
         error("min can't be bigger than max")
     end
     if x > max then
-        x = max
+        return max
     elseif x < min then
-        x = min
+        return min
     end
+    return x
 end
