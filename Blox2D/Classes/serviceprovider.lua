@@ -46,7 +46,7 @@ local metatable = {
         if ServiceProviderTable.__getters[key] then
             return ServiceProviderTable.__getters[key]()
         end
-        return rawget(tbl, "_"..key) or ServiceProviderTable[key]
+        return rawget(tbl, "_"..key) or ServiceProviderTable[key] or tbl:FindFirstChild(key)
     end,
     __newindex = Instance.metatable.__newindex,
     __tostring = Instance.metatable.__tostring

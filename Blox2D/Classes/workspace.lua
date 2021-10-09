@@ -31,7 +31,8 @@ local metatable = {
         if WorkspaceTable.__getters[key] then
             return WorkspaceTable.__getters[key]()
         end
-        return rawget(tbl, "_"..key) or WorkspaceTable[key]
+        return rawget(tbl, "_"..key) or WorkspaceTable[key] or Instance.Table.FindFirstChild(tbl, key)
+        --tbl:FindFirstChild(key)
     end,
     __newindex = Instance.metatable.__newindex,
     __tostring = Instance.metatable.__tostring

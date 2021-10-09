@@ -20,7 +20,7 @@ local metatable = {
         if DataModelTable.__getters[key] then
             return DataModelTable.__getters[key]()
         end
-        return rawget(tbl, "_"..key) or DataModelTable[key]
+        return rawget(tbl, "_"..key) or DataModelTable[key] or tbl:FindFirstChild(key)
     end,
     __newindex = Instance.metatable.__newindex,
     __tostring = Instance.metatable.__tostring
