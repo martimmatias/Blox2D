@@ -1,10 +1,4 @@
 local MyPath = "Blox2D.Utils."
-Vector2 = require(MyPath.."vector2")
---Vector3 = require(MyPath.."vector3")
-UDim = require(MyPath.."udim")
-UDim2 = require(MyPath.."udim2")
-Connection = require(MyPath.."connection")
-ScriptSignal = require(MyPath.."scriptsignal")
 require(MyPath.."table")
 require(MyPath.."math")
 
