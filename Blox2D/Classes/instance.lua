@@ -25,11 +25,18 @@ Instance.__getters_metatable = {__index = InstanceTable.__getters}
 Instance.__setters_metatable = {__index = InstanceTable.__setters}
 
 function InstanceTable.__setters:Parent(value)
-    Check("Set(Parent)", "table", value, "value")
-    assert(typeof(value) == "Instance" or typeof(value) == "Service", ErrorMessages.__setters:format("Parent", tostring(value), type(value) ))
-    assert(self ~= value, ErrorMessages.ParentSelf)
-    if value:_AddChild(self) then
-        self:Set("Parent", value)
+    local oldValue = rawget(self, "_Parent")
+    if value ~= nil then
+        Check("Set(Parent)", "table", value, "value")
+        assert(typeof(value) == "Instance" or typeof(value) == "Service", ErrorMessages.__setters:format("Parent", tostring(value), type(value) ))
+        assert(self ~= value, ErrorMessages.ParentSelf)
+        if not value:_AddChild(self) then
+            return
+        end
+    end
+    self:Set("Parent", value)
+    if oldValue ~= nil then
+        oldValue:_RemoveChild(self)
     end
 end
 function InstanceTable.__setters:Name(value)
@@ -124,10 +131,7 @@ function InstanceTable:IsA(className)
     return table.find(self._ClassNames, className) ~= nil
 end
 function InstanceTable:Destroy()
-    if self._Parent ~= nil then
-        self._Parent:_RemoveChild(self)
-    end
-    self:Set("Parent", nil)
+    self.Parent = nil
 end
 function InstanceTable:Clone()
     error("Instance:Clone() not implemented yet!")
@@ -153,7 +157,7 @@ local metatable = {
         if InstanceTable.__getters[key] then
             return InstanceTable.__getters[key]()
         end
-        return rawget(tbl, "_"..key) or InstanceTable[key]
+        return rawget(tbl, "_"..key) or InstanceTable[key] or tbl:FindFirstChild(key)
     end,
     __newindex = function(tbl, key, value)
         local setter = tbl.__setters[key]
