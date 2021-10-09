@@ -48,7 +48,7 @@ local metatable = {
         error(Blox2D._ErrorMessages.__newindex:format(UDimTable.__type, tostring(index),tostring(value), type(value)))
     end,
     __tostring = function(tbl)
-        return ("%d,%d"):format(tbl.Scale, tbl.Offset)
+        return ("%f,%f"):format(tbl.Scale, tbl.Offset)
     end,
 }
 

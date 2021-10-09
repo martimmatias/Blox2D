@@ -96,7 +96,7 @@ local metatable = {
         error(Blox2D._ErrorMessages.__newindex:format(Vector2Table.__type, tostring(index), tostring(value), type(value)))
     end,
     __tostring = function(tbl)
-        return ("%d,%d"):format(tbl.X, tbl.Y)
+        return ("%f,%f"):format(tbl.X, tbl.Y)
     end,
 }
 

@@ -61,7 +61,7 @@ local metatable = {
         error(Blox2D._ErrorMessages.__newindex:format(UDim2Table.__type, tostring(index), tostring(value), type(value)))
     end,
     __tostring = function(tbl)
-        return ("%s,%s"):format(tostring(tbl.X), tostring(tbl.Y))
+        return ("%f,%f"):format(tostring(tbl.X), tostring(tbl.Y))
     end,
 }
 
