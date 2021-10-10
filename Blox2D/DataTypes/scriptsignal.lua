@@ -1,6 +1,5 @@
 local ScriptSignal = {}
 local ErrorMessages = {
-    __newindex = "Attempted to set a ScriptSignal's property: %s to %s (%s)",
     Connect = "Attempted to connect ScriptSignal to %s (%s)",
 }
 local ScriptSignalTable = {
@@ -16,7 +15,7 @@ function ScriptSignalTable:Connect(func)
 end
 
 function ScriptSignalTable:Disconnect(connection)
-    for i = 1, #self.Connections do
+    for i = #self.Connections, 1, -1  do
         if self.Connections[i] == connection then
             table.remove(self.Connections, i)
         end
@@ -33,7 +32,7 @@ end
 local metatable = {
     __index = ScriptSignalTable,
     __newindex = function(table, index, value)
-        error(ErrorMessages.__newindex:format(tostring(index), tostring(value), type(value)))
+        error(Blox2D._ErrorMessages.__newindex:format(ScriptSignalTable.__type ,tostring(index), tostring(value), type(value)))
     end,
 }
 
