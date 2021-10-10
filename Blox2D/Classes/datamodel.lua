@@ -5,14 +5,18 @@ local DataModelTable = {
     __setters = {},
     __getters = {},
 }
-DataModel.Table = DataModelTable
-setmetatable(DataModelTable, {__index = Instance._Dictionary.ServiceProvider.Table})
+DataModel._Table = DataModelTable
+setmetatable(DataModelTable, {__index = Instance._Dictionary.ServiceProvider._Table})
 setmetatable(DataModelTable.__setters, Instance._Dictionary.ServiceProvider.__setters_metatable)
 setmetatable(DataModelTable.__getters, Instance._Dictionary.ServiceProvider.__getters_metatable)
 
 function DataModelTable:BindToClose(func)
     Check("BindToClose", "function", func, "function")
     rawget(self, "_Close"):Connect(func)
+end
+
+function DataModelTable:Destroy()
+    error(Blox2D._ErrorMessages.CollonFunction:format("Destroy"))
 end
 
 local metatable = {
