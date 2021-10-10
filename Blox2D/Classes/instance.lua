@@ -38,6 +38,14 @@ function InstanceTable.__setters:Parent(value)
     if oldValue ~= nil then
         oldValue:_RemoveChild(self)
     end
+    
+    --print(("Setting %s's parent to %s"):format(self, value))
+    --table.print(self._Children)
+    for _, child in pairs(rawget(self, "_Children")) do
+        --fire children AncestryChanged
+        child:_AncestryChanged(self, value)
+        child.AncestryChanged:Fire(self, value)
+    end
 end
 function InstanceTable.__setters:Name(value)
     Check("Set(Name)", "string", value, "value")
@@ -66,6 +74,11 @@ function InstanceTable:_RemoveChild(child)
         end
     end
     return true
+end
+function InstanceTable:_AncestryChanged(child, parent)
+    if parent == nil then
+        self:Destroy()
+    end
 end
 function InstanceTable:FindFirstChild(name)
     Check("FindFirstChild", "string", name, "name")
@@ -188,7 +201,8 @@ Instance.new = function(className, parent)
     local instance = DeepCopy(InstanceTemplate)
     rawset(instance, "Changed", ScriptSignal.new())
     rawset(instance, "ChildAdded", ScriptSignal.new())
-    rawset(instance, "ChildRemoved", ScriptSignal.new()) 
+    rawset(instance, "ChildRemoved", ScriptSignal.new())
+    rawset(instance, "AncestryChanged", ScriptSignal.new())
     if className then
         Dictionary[className].new(instance)
     else

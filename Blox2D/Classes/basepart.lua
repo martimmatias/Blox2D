@@ -69,28 +69,48 @@ function BasePartTable.__setters:Color(color)
 end
 
 function BasePartTable.__setters:Parent(value)
-    local wasDescendant = self:FindFirstAncestor("workspace")
+    --local wasDescendant = self:FindFirstAncestor("workspace")
     --default parent implementation
     Instance._Table.__setters.Parent(self, value)
 
-    if wasDescendant then
+    local isDescendant = self:IsDescendantOf(workspace)
+    if rawget(self, "__Draw") then
         --was descendant of workspace
-        if not self:FindFirstAncestor("workspace") then
+        if isDescendant == false then
             --no longer descendant of workspace
             --print("REMOVING FROM DRAW ORDER")
+            rawset(self, "__Draw", false)
             Blox2D._RemoveFromDrawOrder(self)
             return
         end
     end
 
     --new parent is descendant of workspace, old parent wasn't
-    if value ~= nil and self:FindFirstAncestor("workspace") then
+    if value ~= nil and isDescendant == true then
         --print("ADDING TO DRAW ORDER")
+        rawset(self, "__Draw", true)
         Blox2D._AddToDrawOrder(self)
     end
 end
 
+function BasePartTable:_AncestryChanged(child, parent)
+    Instance._Table._AncestryChanged(self, child, parent)
+    local isDescendant = parent == workspace or child:IsDescendantOf(workspace)
+
+    if parent ~= nil then
+        if isDescendant == true then
+            --print("ADDING TO DRAW ORDER")
+            Blox2D._AddToDrawOrder(self)
+        else
+            --print("REMOVING FROM DRAW ORDER")
+            Blox2D._RemoveFromDrawOrder(self)
+        end
+        rawset(self, "__Draw", isDescendant)
+    end
+end
+
 function BasePartTable:Destroy()
+    print("destroying self :)")
     Instance._Table.Destroy(self)
     --
 end
@@ -110,6 +130,7 @@ BasePart.new = function(instance)
     setmetatable(instance, metatable)
     table.insert(rawget(instance, "_ClassNames"), "BasePart")
     instance.Name = "BasePart"
+    rawset(instance, "__Draw", false)
     rawset(instance, "_Anchored", true)
     rawset(instance, "_CanCollide", true)
     rawset(instance, "_Massless", false)

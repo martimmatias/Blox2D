@@ -5,8 +5,8 @@ local WorkspaceTable = {
     __setters = {},
     __getters = {},
 }
-Workspace.Table = WorkspaceTable
-setmetatable(WorkspaceTable, {__index = Instance.Table})
+Workspace._Table = WorkspaceTable
+setmetatable(WorkspaceTable, {__index = Instance._Table})
 setmetatable(WorkspaceTable.__setters, Instance.__setters_metatable)
 Workspace.__setters_metatable = {__index = WorkspaceTable.__setters}
 setmetatable(WorkspaceTable.__getters, Instance.__getters_metatable)
@@ -22,8 +22,26 @@ function WorkspaceTable.__setters:FallenPartsDestroyHeight(value)
     WorkspaceTable:Set("FallenPartsDestroyHeight", value)
 end
 
-function WorkspaceTable:GetService(name)
+function WorkspaceTable.__setters:CurrentCamera(instance)
+    local currentCamera = rawget(self, "_CurrentCamera")
+    if currentCamera == instance then
+        --setting to current value
+        return
+    end
+    if instance == nil then
+        instance = Instance.new("Camera")
+        instance.Parent = self
+    else
+        Check("Set(CurrentCamera)", "table", instance, "instance")
+        assert(instance:IsA("Camera"), Blox2D._ErrorMessages.__newindex:format(
+            self, "CurrentCamera", tostring(instance), type(instance)))
+        assert(rawget(instance, "_Parent") == self, "CurrentCamera must be a child of workspace")
+    end
+    WorkspaceTable:Set("CurrentCamera", instance)
+end
 
+function WorkspaceTable:Destroy()
+    error(Blox2D._ErrorMessages.CollonFunction:format("Destroy"))
 end
 
 local metatable = {
@@ -31,7 +49,7 @@ local metatable = {
         if WorkspaceTable.__getters[key] then
             return WorkspaceTable.__getters[key]()
         end
-        return rawget(tbl, "_"..key) or WorkspaceTable[key] or Instance.Table.FindFirstChild(tbl, key)
+        return rawget(tbl, "_"..key) or WorkspaceTable[key] or Instance._Table.FindFirstChild(tbl, key)
         --tbl:FindFirstChild(key)
     end,
     __newindex = Instance.metatable.__newindex,
