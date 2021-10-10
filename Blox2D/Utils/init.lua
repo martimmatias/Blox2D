@@ -9,6 +9,18 @@ typeof = function(value)
     end
 end
 
+---@diagnostic disable-next-line: lowercase-global
+version = function()
+    local major, minor, revision = love.getVersion()
+    return string.format("%d.%d.%d", major, minor, revision)
+end
+
+---@diagnostic disable-next-line: lowercase-global
+warn = function(...)
+    local args = {...}
+    print(string.char(175).."[WARN]", table.unpack(args))
+end
+
 DeepCopy = function(tbl)
     local copy = {}
     for i, v in pairs(tbl) do
