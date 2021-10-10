@@ -7,8 +7,8 @@ local ServiceProviderTable = {
     __setters = {},
     __getters = {},
 }
-ServiceProvider.Table = ServiceProviderTable
-setmetatable(ServiceProviderTable, {__index = Instance.Table})
+ServiceProvider._Table = ServiceProviderTable
+setmetatable(ServiceProviderTable, {__index = Instance._Table})
 setmetatable(ServiceProviderTable.__setters, Instance.__setters_metatable)
 ServiceProvider.__setters_metatable = {__index = ServiceProviderTable.__setters}
 setmetatable(ServiceProviderTable.__getters, Instance.__getters_metatable)

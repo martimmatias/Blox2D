@@ -5,8 +5,8 @@ local BasePartTable = {
     __setters = {},
     __getters = {},
 }
-BasePart.Table = BasePartTable
-setmetatable(BasePartTable, {__index = Instance.Table})
+BasePart._Table = BasePartTable
+setmetatable(BasePartTable, {__index = Instance._Table})
 setmetatable(BasePartTable.__setters, Instance.__setters_metatable)
 BasePart.__setters_metatable = {__index = BasePartTable.__setters}
 setmetatable(BasePartTable.__getters, Instance.__getters_metatable)
@@ -71,7 +71,7 @@ end
 function BasePartTable.__setters:Parent(value)
     local wasDescendant = self:FindFirstAncestor("workspace")
     --default parent implementation
-    Instance.Table.__setters.Parent(self, value)
+    Instance._Table.__setters.Parent(self, value)
 
     if wasDescendant then
         --was descendant of workspace
@@ -91,7 +91,7 @@ function BasePartTable.__setters:Parent(value)
 end
 
 function BasePartTable:Destroy()
-    Instance.Table.Destroy(self)
+    Instance._Table.Destroy(self)
     --
 end
 

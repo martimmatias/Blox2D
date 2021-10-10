@@ -20,7 +20,7 @@ local InstanceTable = {
     __setters = {},
     __getters = {},
 }
-Instance.Table = InstanceTable
+Instance._Table = InstanceTable
 Instance.__getters_metatable = {__index = InstanceTable.__getters}
 Instance.__setters_metatable = {__index = InstanceTable.__setters}
 
@@ -189,13 +189,13 @@ Instance.new = function(className, parent)
     rawset(instance, "Changed", ScriptSignal.new())
     rawset(instance, "ChildAdded", ScriptSignal.new())
     rawset(instance, "ChildRemoved", ScriptSignal.new()) 
-    if type(parent) == "table" and typeof(parent) == "Instance" then
-        instance.Parent = parent
-    end
     if className then
         Dictionary[className].new(instance)
     else
         setmetatable(instance, metatable)
+    end
+    if type(parent) == "table" and typeof(parent) == "Instance" then
+        instance.Parent = parent
     end
     return instance
 end
