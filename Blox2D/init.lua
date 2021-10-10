@@ -47,6 +47,10 @@ game.Name = "game"
 
 workspace = game:GetService("Workspace")
 workspace.Name = "workspace"
+local camera = Instance.new("Camera")
+camera.Parent = workspace
+camera = nil
+--workspace.CurrentCamera = Instance.new("Camera", workspace)
 
 Blox2D.quit = function()
     --table.print(table.create(1000, "e"))
@@ -64,9 +68,17 @@ Blox2D.update = function(dt)
 end
 love.update = Blox2D.update
 
-function DrawWorkspaceInstance()
+Blox2D.focus = function(focus)
     
 end
+love.focus = Blox2D.focus
+
+Blox2D.resize = function(w, h)
+    if workspace.CurrentCamera then
+        rawset(workspace.CurrentCamera, "_ViewportSize", Vector2.new(w, h))
+    end
+end
+love.resize = Blox2D.resize
 
 Blox2D.draw = function()
     --local start = love.timer.getTime()
