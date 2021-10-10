@@ -37,7 +37,7 @@ local metatable = {
 Camera.new = function(instance)
     setmetatable(instance, metatable)
     table.insert(rawget(instance, "_ClassNames"), "Camera")
-    instance.Name = "Camera"
+    rawset(instance, "_Name", "Camera")
     rawset(instance, "_Position", Vector2.new())
     rawset(instance, "_Rotation", 0)
     rawset(instance, "_ViewportSize", Vector2.new(love.graphics.getDimensions()))

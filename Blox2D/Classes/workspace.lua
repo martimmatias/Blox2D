@@ -1,28 +1,28 @@
 local Workspace = {}
 Instance._Dictionary.Workspace = Workspace
 
-local WorkspaceTable = {
+local Table = {
     __setters = {},
     __getters = {},
 }
-Workspace._Table = WorkspaceTable
-setmetatable(WorkspaceTable, {__index = Instance._Table})
-setmetatable(WorkspaceTable.__setters, Instance.__setters_metatable)
-Workspace.__setters_metatable = {__index = WorkspaceTable.__setters}
-setmetatable(WorkspaceTable.__getters, Instance.__getters_metatable)
-Workspace.__getters_metatable = {__index = WorkspaceTable.__getters}
+Workspace._Table = Table
+setmetatable(Table, {__index = Instance._Table})
+setmetatable(Table.__setters, Instance.__setters_metatable)
+Workspace.__setters_metatable = {__index = Table.__setters}
+setmetatable(Table.__getters, Instance.__getters_metatable)
+Workspace.__getters_metatable = {__index = Table.__getters}
 
-function WorkspaceTable.__setters:Gravity(value)
+function Table.__setters:Gravity(value)
     Check("Set(Gravity)", "number", value, "value")
-    WorkspaceTable:Set("Gravity", value)
+    self:Set("Gravity", value)
 end
 
-function WorkspaceTable.__setters:FallenPartsDestroyHeight(value)
+function Table.__setters:FallenPartsDestroyHeight(value)
     Check("Set(FallenPartsDestroyHeight)", "number", value, "value")
-    WorkspaceTable:Set("FallenPartsDestroyHeight", value)
+    self:Set("FallenPartsDestroyHeight", value)
 end
 
-function WorkspaceTable.__setters:CurrentCamera(instance)
+function Table.__setters:CurrentCamera(instance)
     local currentCamera = rawget(self, "_CurrentCamera")
     if currentCamera == instance then
         --setting to current value
@@ -37,19 +37,19 @@ function WorkspaceTable.__setters:CurrentCamera(instance)
             self, "CurrentCamera", tostring(instance), type(instance)))
         assert(rawget(instance, "_Parent") == self, "CurrentCamera must be a child of workspace")
     end
-    WorkspaceTable:Set("CurrentCamera", instance)
+    self:Set("CurrentCamera", instance)
 end
 
-function WorkspaceTable:Destroy()
+function Table:Destroy()
     error(Blox2D._ErrorMessages.CollonFunction:format("Destroy"))
 end
 
 local metatable = {
     __index = function (tbl, key)
-        if WorkspaceTable.__getters[key] then
-            return WorkspaceTable.__getters[key]()
+        if Table.__getters[key] then
+            return Table.__getters[key]()
         end
-        return rawget(tbl, "_"..key) or WorkspaceTable[key] or Instance._Table.FindFirstChild(tbl, key)
+        return rawget(tbl, "_"..key) or Table[key] or Instance._Table.FindFirstChild(tbl, key)
         --tbl:FindFirstChild(key)
     end,
     __newindex = Instance.metatable.__newindex,
@@ -62,6 +62,11 @@ Workspace.new = function(instance)
     rawset(instance, "_Gravity", 9.8)
     rawset(instance, "_FallenPartsDestroyHeight", -1000)
     instance.Name = "Workspace"
+    instance.ChildRemoved:Connect(function(child)
+        if child == rawget(instance, "_CurrentCamera") then
+            instance.CurrentCamera = nil
+        end
+    end)
 end
 
 return Workspace

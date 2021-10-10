@@ -49,6 +49,7 @@ workspace = game:GetService("Workspace")
 workspace.Name = "workspace"
 local camera = Instance.new("Camera")
 camera.Parent = workspace
+workspace.CurrentCamera = camera
 camera = nil
 --workspace.CurrentCamera = Instance.new("Camera", workspace)
 
@@ -82,8 +83,12 @@ love.resize = Blox2D.resize
 
 Blox2D.draw = function()
     --local start = love.timer.getTime()
+    if rawget(workspace, "_CurrentCamera") == nil then
+        warn("CurrentCamera is nil!")
+        return
+    end
     love.graphics.push()
-    love.graphics.translate( 500, 0)
+    love.graphics.translate(rawget(workspace.CurrentCamera, "_Position").X, rawget(workspace.CurrentCamera, "_Position").Y)
     for i, instance in pairs(DrawOrder) do
         love.graphics.setColor(
             rawget(instance, "_Color").R,
