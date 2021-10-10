@@ -14,6 +14,7 @@ Blox2D._ErrorMessages = {
 }
 local MyPath = "Blox2D."
 require(MyPath.."Utils")
+require(MyPath.."DataTypes")
 require(MyPath.."Classes")
 
 Blox2D._Draw = ScriptSignal.new()
@@ -34,6 +35,10 @@ function Blox2D._RemoveFromDrawOrder(instance)
             break
         end
     end
+end
+
+function Blox2D._UpdateDrawOrder(instance)
+    table.sort(DrawOrder, OrderDraw)
 end
 
 ---@diagnostic disable-next-line: lowercase-global
@@ -64,11 +69,26 @@ function DrawWorkspaceInstance()
 end
 
 Blox2D.draw = function()
+    --local start = love.timer.getTime()
+    love.graphics.push()
+    love.graphics.translate( 500, 0)
     for i, instance in pairs(DrawOrder) do
-        love.graphics.setColor( 1/i, 0, 0)
-        love.graphics.rectangle( "fill", instance.Position.X, instance.Position.Y,
-        instance.Size.X, instance.Size.Y)
+        love.graphics.setColor(
+            rawget(instance, "_Color").R,
+            rawget(instance, "_Color").G,
+            rawget(instance, "_Color").B,
+            rawget(instance, "_Transparency")
+        )
+        love.graphics.rectangle(
+        "fill",
+        rawget(instance, "_Position").X,
+        rawget(instance, "_Position").Y,
+        rawget(instance, "_Size").X,
+        rawget(instance, "_Size").Y
+        )
     end
+    love.graphics.pop()
+    --print((love.timer.getTime()-start)*1000)
 end
 love.draw = Blox2D.draw
 

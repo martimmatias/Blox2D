@@ -28,6 +28,10 @@ function BasePartTable.__setters:Rotation(value)
     Check("Set(Rotation)", "number", value, "value")
     self:Set("Rotation", value)
 end
+function BasePartTable.__setters:Transparency(value)
+    Check("Set(Transparency)", "number", value, "value")
+    self:Set("Transparency", value)
+end
 function BasePartTable.__setters:Position(vector)
     Check("Set(Position)", "table", vector, "vector")
     if typeof(vector) == "Vector2" then
@@ -42,7 +46,26 @@ function BasePartTable.__setters:Size(vector)
 end
 function BasePartTable.__setters:ZIndex(value)
     Check("Set(ZIndex)", "number", value, "value")
+    local oldValue = rawget(self, "_ZIndex")
     self:Set("ZIndex", math.floor(value))
+    if oldValue ~= rawget(self, "_ZIndex") and self:FindFirstAncestor("workspace") then
+        --value changed
+        Blox2D._UpdateDrawOrder(self)
+    end
+end
+function BasePartTable.__setters:BrickColor(brickColor)
+    Check("Set(BrickColor)", "table", brickColor, "brickColor")
+    if typeof(brickColor) == "BrickColor" then
+        self:Set("BrickColor", brickColor)
+        self:Set("Color", brickColor.Color)--considering cloning instead 🤔
+    end
+end
+function BasePartTable.__setters:Color(color)
+    Check("Set(Color)", "table", color, "color")
+    if typeof(color) == "Color3" then
+        self:Set("Color", color)
+        self:Set("BrickColor", BrickColor.new(color))
+    end
 end
 
 function BasePartTable.__setters:Parent(value)
@@ -94,8 +117,12 @@ BasePart.new = function(instance)
     rawset(instance, "_Position", Vector2.new())
     rawset(instance, "_Size", Vector2.new(100,100))
     rawset(instance, "_ZIndex", 1)
+    rawset(instance, "_Transparency", 0)
+    rawset(instance, "_BrickColor", BrickColor.new())
+    rawset(instance, "_Color", instance.BrickColor.Color)
     rawset(instance, "Touched", ScriptSignal.new())
     rawset(instance, "Touchended", ScriptSignal.new())
+    --table.print(instance)
     
 end
 
