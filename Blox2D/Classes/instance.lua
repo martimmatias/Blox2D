@@ -109,6 +109,17 @@ function InstanceTable:FindFirstAncestor(name)
     end
     return current.Parent
 end
+function InstanceTable:IsDescendantOf(instance)
+    Check("IsDescendantOf", "table", instance, "instance")
+    local current = self
+    while(current.Parent ~= nil and current.Parent ~= instance) do
+        current = current.Parent
+    end
+    return current.Parent ~= nil
+end
+function InstanceTable:IsAncestorOf(instance)
+    return InstanceTable.IsDescendantOf(instance, self)
+end
 function InstanceTable:FindFirstAncestorOfClass(className)
     Check("FindFirstAncestor", "string", className, "className")
     local current = self
