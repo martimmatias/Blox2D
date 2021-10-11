@@ -248,6 +248,13 @@ local metatable = {
     end
 }
 
+--[[
+    d =   ((r2-r1)*0.30)^2
+    + ((g2-g1)*0.59)^2
+    + ((b2-b1)*0.11)^2
+]]
+
+
 BrickColor.new = function(...)
     local args = {...}
     local brickColor = setmetatable({}, metatable)
