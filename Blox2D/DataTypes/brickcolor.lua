@@ -378,6 +378,12 @@ local metatable = {
     end,
     __tostring = function(tbl)
         return rawget(tbl, "Name") or "BrickColor"
+    end,
+    __eq = function(tbl, value)
+        if type(value) == tbl and typeof(value) == "BrickColor" then
+            return tbl.Name == value.Name
+        end
+        return false
     end
 }
 
@@ -449,6 +455,34 @@ end
 BrickColor.palette = function (number)
     Check("BrickColor.palette", "number", number, "number")
     return BrickColor.new(BrickColorsArrayPalette[number+1])
+end
+
+BrickColor.White = function ()
+    return BrickColor.new("White")
+end
+
+BrickColor.Gray = function ()
+    return BrickColor.new("Medium stone grey")
+end
+
+BrickColor.DarkGray = function ()
+    return BrickColor.new("Dark stone grey")
+end
+
+BrickColor.Black = function ()
+    return BrickColor.new("Black")
+end
+
+BrickColor.Red = function ()
+    return BrickColor.new("Bright red")
+end
+
+BrickColor.Green = function ()
+    return BrickColor.new("Bright dark")
+end
+
+BrickColor.Blue = function ()
+    return BrickColor.new("Bright blue")
 end
 
 return BrickColor
