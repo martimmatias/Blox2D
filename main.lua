@@ -24,7 +24,7 @@ function love.load()
     parent.Position = Vector2.new(2*90, 2*90)
     parent.Size = Vector2.new(10,10)
     parent.ZIndex = 2
-    parent.Transparency = 0.5
+    parent.Transparency = 1
     parent.Parent = workspace
 
     for i = 1, 1 do
@@ -38,4 +38,6 @@ function love.load()
     table.print(Enum.PartShape._EnumItems)
 
     parent.BasePart.Parent = workspace
+
+    parent.BrickColor = BrickColor.Red()
 end
