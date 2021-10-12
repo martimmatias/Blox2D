@@ -229,13 +229,146 @@ for name, bc in pairs(BrickColorsDictionary) do
     bc.Name = name
     BrickColorsArray[bc.Number] = bc
 end
+name = nil
+bc = nil
 --Colors with duplicate names
 BrickColorsArray[127] = {Name = "Gold", Number = 127, RGB = {220, 188, 129}}
 BrickColorsArray[216] = {Name = "Rust", Number = 216, RGB = {144, 76, 42}}
 BrickColorsArray[219] = {Name = "Lilac", Number = 219, RGB = {107, 98, 155}}
 BrickColorsArray[1017] = {Name = "Deep orange", Number = 219, RGB = {255, 176, 0}}
 --
-
+--
+local BrickColorsArrayPalette = {
+"Earth green",
+"Slime green",
+"Bright bluish green",
+"Black",
+"Deep blue",
+"Dark blue",
+"Navy blue",
+"Parsley green",
+"Dark green",
+"Teal",
+"Smoky grey",
+"Steel blue",
+"Storm blue",
+"Lapis",
+"Dark indigo",
+"Camo",
+"Sea green",
+"Shamrock",
+"Toothpaste",
+"Sand blue",
+"Medium blue",
+"Bright blue",
+"Really blue",
+"Mulberry",
+"Forest green",
+"Bright green",
+"Grime",
+"Lime green",
+"Pastel blue-green",
+"Fossil",
+"Electric blue",
+"Lavender",
+"Royal purple",
+"Eggplant",
+"Sand green",
+"Moss",
+"Artichoke",
+"Sage green",
+"Pastel light blue",
+"Cadet blue",
+"Cyan",
+"Alder",
+"Lilac",
+"Plum",
+"Bright violet",
+"Olive",
+"Br. yellowish green",
+"Olivine",
+"Laurel green",
+"Quill grey",
+"Ghost grey",
+"Pastel Blue",
+"Pastel violet",
+"Pink",
+"Hot pink",
+"Magenta",
+"Crimson",
+"Deep orange",
+"New Yeller",
+"Medium green",
+"Mint",
+"Pastel green",
+"Light stone grey",
+"Light blue",
+"Baby blue",
+"Carnation pink",
+"Persimmon",
+"Really red",
+"Bright red",
+"Maroon",
+"Gold",
+"Bright yellow",
+"Daisy orange",
+"Cool yellow",
+"Pastel yellow",
+"Pearl",
+"Fog",
+"Mauve",
+"Sunrise",
+"Terra Cotta",
+"Dusty Rose",
+"Cocoa",
+"Neon orange",
+"Bright orange",
+"Wheat",
+"Buttermilk",
+"Institutional white",
+"White",
+"Light reddish violet",
+"Pastel orange",
+"Salmon",
+"Tawny",
+"Rust",
+"CGA brown",
+"Br. yellowish orange",
+"Cashmere",
+"Khaki",
+"Lily white",
+"Seashell",
+"Pastel brown",
+"Light orange",
+"Medium red",
+"Burgundy",
+"Reddish brown",
+"Cork",
+"Burlap",
+"Beige",
+"Oyster",
+"Mid gray",
+"Brick yellow",
+"Nougat",
+"Brown",
+"Pine Cone",
+"Fawn brown",
+"Sand red",
+"Hurricane grey",
+"Cloudy grey",
+"Linen",
+"Copper",
+"Dark orange",
+"Dirt brown",
+"Bronze",
+"Dark stone grey",
+"Medium stone grey",
+"Flint",
+"Dark taupe",
+"Burnt Sienna",
+"Really black"
+} 
+--
 local metatable = {
     __index = function(tbl, index)
         return Table[index] or rawget(tbl, string.upper(index))
@@ -254,6 +387,19 @@ local metatable = {
     + ((b2-b1)*0.11)^2
 ]]
 
+local function GetClosestBrickColorTemplate(color)
+    local dif = math.huge()
+    local closest
+    for _,v in pairs(BrickColorsDictionary) do
+        local d = ((v.RGB[1] - color.R)^2)
+        + ((v.RGB[2] - color.G)^2) + ((v.RGB[3] - color.B)^2)
+        if d < dif then
+            dif = d
+            closest = v
+        end
+    end
+    return closest
+end
 
 BrickColor.new = function(...)
     local args = {...}
@@ -265,9 +411,10 @@ BrickColor.new = function(...)
         "number", args[2], "B",
         "number", args[3], "G"
         )
-        rawset(brickColor, "R", args[1])
-        rawset(brickColor, "G", args[2])
-        rawset(brickColor, "B", args[3])
+        template = GetClosestBrickColorTemplate(Color3.fromRGB(args[1], args[2], args[3]))
+        if template == nil then
+            error()
+        end
     elseif #args == 1 then
         local value = args[1]
         if type(value) == "string" then
@@ -280,10 +427,16 @@ BrickColor.new = function(...)
             if template == nil then
                 error()
             end
+        elseif type(value) == "table" and typeof(value) == "Color3" then
+            template = GetClosestBrickColorTemplate(value)
+            if template == nil then
+                error()
+            end
         end
     else
         template = BrickColorsDictionary["Medium stone grey"]
     end
+
     rawset(brickColor, "Number", template.Number)
     rawset(brickColor, "R", template.RGB[1])
     rawset(brickColor, "G", template.RGB[2])
@@ -291,6 +444,11 @@ BrickColor.new = function(...)
     rawset(brickColor, "Name", template.Name)
     rawset(brickColor, "Color", Color3.fromRGB(brickColor.R, brickColor.G, brickColor.B))
     return brickColor
+end
+
+BrickColor.palette = function (number)
+    Check("BrickColor.palette", "number", number, "number")
+    return BrickColor.new(BrickColorsArrayPalette[number+1])
 end
 
 return BrickColor
