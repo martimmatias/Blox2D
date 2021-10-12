@@ -19,25 +19,25 @@ function love.load()
     --table.print(brickColor)
     
     
-    local parent = Instance.new("BasePart")
+    --[[local parent = Instance.new("BasePart")
     parent.Name = "Parent Part"
     parent.Position = Vector2.new(2*90, 2*90)
     parent.Size = Vector2.new(10,10)
     parent.ZIndex = 2
     parent.Transparency = 1
-    parent.Parent = workspace
+    parent.Parent = workspace--]]
 
-    for i = 1, 1 do
+    for i = 1, 2 do
         local part = Instance.new("BasePart")
         part.Position = Vector2.new(i*90, i*90)
         part.ZIndex = i
         part.Transparency = i*0.25
-        part.Parent = parent
+        part.Parent = workspace--parent
     end
 
-    table.print(Enum.PartShape._EnumItems)
+    workspace.BasePart.BrickColor = BrickColor.Red()
 
-    parent.BasePart.Parent = workspace
+    --parent.BasePart.Parent = workspace
 
-    parent.BrickColor = BrickColor.Red()
+    --parent.BrickColor = BrickColor.Red()
 end
