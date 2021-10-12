@@ -35,5 +35,7 @@ function love.load()
         part.Parent = parent
     end
 
+    table.print(Enum.PartShape._EnumItems)
+
     parent.BasePart.Parent = workspace
 end
