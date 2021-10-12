@@ -8,7 +8,14 @@ EnumItem.new = function (name, value)
         Name = name,
         Value = value,
         --EnumType = enumType
-    }, {__index = Table})
+    }, {__index = Table,
+        __eq = function (tbl, value)
+            if type(value) == "table" then
+                return tbl.Value == value.Value and tbl.Name == value.Name
+            end
+            return tbl.Name == value or tbl.Value == value
+        end,
+    })
     return enumItem
 end
 
