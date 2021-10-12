@@ -94,7 +94,7 @@ Blox2D.draw = function()
             rawget(instance, "_Color").R,
             rawget(instance, "_Color").G,
             rawget(instance, "_Color").B,
-            rawget(instance, "_Transparency")
+            1-rawget(instance, "_Transparency")
         )
         love.graphics.rectangle(
         "fill",
