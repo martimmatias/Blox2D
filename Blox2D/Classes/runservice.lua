@@ -1,0 +1,24 @@
+local Class, Table, getters, setters, newFunc = _Inherit(Instance, "Run Service", Instance.__getters_metatable, Instance.__setters_metatable)
+--table.print(testClass)
+
+function Table:IsRunning()
+    return true
+end
+
+function Table:Stop()
+    love.event.quit()
+end
+
+Class.new = function ()
+    local instance = newFunc()
+    rawset(instance, "PreRender", ScriptSignal.new())
+    rawset(instance, "RenderStepped", ScriptSignal.new())
+    rawset(instance, "Stepped", ScriptSignal.new())
+    rawset(instance, "Heartbeat", ScriptSignal.new())
+    rawset(instance, "PreAnimation", ScriptSignal.new())
+    rawset(instance, "PreSimulation", ScriptSignal.new())
+    rawset(instance, "PostSimulation", ScriptSignal.new())
+    return instance
+end
+
+return Class

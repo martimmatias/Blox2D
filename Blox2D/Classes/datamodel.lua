@@ -26,8 +26,8 @@ local metatable = {
         end
         return rawget(tbl, "_"..key) or DataModelTable[key] or tbl:FindFirstChild(key)
     end,
-    __newindex = Instance.metatable.__newindex,
-    __tostring = Instance.metatable.__tostring
+    __newindex = Instance._metatable.__newindex,
+    __tostring = Instance._metatable.__tostring
 }
 
 DataModel.new = function(instance)

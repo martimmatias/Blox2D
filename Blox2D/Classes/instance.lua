@@ -195,7 +195,7 @@ local metatable = {
         return tbl.Name
     end,
 }
-Instance.metatable = metatable
+Instance._metatable = metatable
 
 Instance.new = function(className, parent)
     local instance = DeepCopy(InstanceTemplate)
@@ -212,5 +212,42 @@ Instance.new = function(className, parent)
         instance.Parent = parent
     end
     return instance
+end
+
+function _Inherit(parentClass, newType, __getters_metatable, __setters_metatable)
+    local newClass = {}
+    newClass._Table = setmetatable({
+        __type = newType,
+        __getters = setmetatable({}, parentClass.__getters_metatable),
+        __setters = setmetatable({}, parentClass.__setters_metatable),
+    }, {__index = parentClass._Table})
+
+    local Table = newClass._Table
+    local getters = Table.__getters
+
+    newClass.__getters_metatable = __getters_metatable or {__index = Table.__getters}
+    newClass.__setters_metatable = __setters_metatable or {__index = Table.__setters}
+
+    
+    newClass._metatable = {
+        __index = function (tbl, key)
+            if getters[key] then
+                return getters[key]()
+            end
+            return rawget(tbl, "_"..key) or Table[key] or Instance._Table.FindFirstChild(tbl, key)
+            --tbl:FindFirstChild(key)
+        end,
+        __newindex = parentClass._metatable.__newindex,
+        __tostring = parentClass._metatable.__tostring,
+    }
+
+
+    return newClass, Table, getters, Table.__setters, function ()
+        local instance = parentClass.new()
+        setmetatable(instance, newClass._metatable)
+        table.insert(instance._ClassNames, newType)
+        rawset(instance, "_Name", newType)
+        return instance
+    end
 end
 return Instance

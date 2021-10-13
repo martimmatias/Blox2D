@@ -27,7 +27,7 @@ function love.load()
     parent.Transparency = 1
     parent.Parent = workspace--]]
 
-    for i = 1, 2 do
+    --[[for i = 1, 2 do
         local part = Instance.new("BasePart")
         part.Position = Vector2.new(i*90, i*90)
         part.ZIndex = i
@@ -35,9 +35,19 @@ function love.load()
         part.Parent = workspace--parent
     end
 
-    workspace.BasePart.BrickColor = BrickColor.Red()
+    workspace.BasePart.BrickColor = BrickColor.Red()--]]
 
     --parent.BasePart.Parent = workspace
 
     --parent.BrickColor = BrickColor.Red()
+
+    --[[local testClass, tbl, getters, setters, newFunc = _Inherit(Instance, "Test", Instance.__getters_metatable, Instance.__setters_metatable)
+    --table.print(testClass)
+
+    testClass.new = function ()
+        local instance = newFunc()
+        rawset(instance, "_Test", true)
+        return instance
+    end--]]
+
 end

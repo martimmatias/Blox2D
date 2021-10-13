@@ -30,8 +30,8 @@ local metatable = {
         end
         return rawget(tbl, "_"..key) or Table[key] or tbl:FindFirstChild(key)
     end,
-    __newindex = Instance.metatable.__newindex,
-    __tostring = Instance.metatable.__tostring
+    __newindex = Instance._metatable.__newindex,
+    __tostring = Instance._metatable.__tostring
 }
 
 Camera.new = function(instance)

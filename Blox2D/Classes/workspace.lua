@@ -52,8 +52,8 @@ local metatable = {
         return rawget(tbl, "_"..key) or Table[key] or Instance._Table.FindFirstChild(tbl, key)
         --tbl:FindFirstChild(key)
     end,
-    __newindex = Instance.metatable.__newindex,
-    __tostring = Instance.metatable.__tostring
+    __newindex = Instance._metatable.__newindex,
+    __tostring = Instance._metatable.__tostring
 }
 
 Workspace.new = function(instance)
