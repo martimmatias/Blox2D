@@ -13,6 +13,7 @@ Blox2D._ErrorMessages = {
     CollonFunction = ":%s()",
     CantCollonFunction = "Can't use :%s() on %s",
 }
+
 local MyPath = "Blox2D."
 require(MyPath.."Utils")
 require(MyPath.."DataTypes")
@@ -46,17 +47,18 @@ end
 game = Instance.new("DataModel")
 game.Name = "game"
 
+local RunService = game:GetService("Run Service")
+
+---@diagnostic disable-next-line: lowercase-global
 workspace = game:GetService("Workspace")
-workspace.Name = "workspace"
+
 local camera = Instance.new("Camera")
 camera.Parent = workspace
 workspace.CurrentCamera = camera
 camera = nil
---workspace.CurrentCamera = Instance.new("Camera", workspace)
 
 
 Blox2D.quit = function()
-    --table.print(table.create(1000, "e"))
     rawget(game, "_Close"):Fire()
 end
 love.quit = Blox2D.quit
@@ -67,7 +69,9 @@ end
 love.load = Blox2D.load()
 
 Blox2D.update = function(dt)
-    
+    RunService.Stepped:Fire()
+
+    RunService.Heartbeat:Fire()
 end
 love.update = Blox2D.update
 
@@ -84,6 +88,8 @@ end
 love.resize = Blox2D.resize
 
 Blox2D.draw = function()
+    RunService.PreRender:Fire()
+    RunService.RenderStepped:Fire()
     --local start = love.timer.getTime()
     if rawget(workspace, "_CurrentCamera") == nil then
         warn("CurrentCamera is nil!")

@@ -52,6 +52,7 @@ function love.load()
 
     local runservice = game:GetService("Run Service")
     --table.print(runservice)
+    print(runservice)
     runservice.PreRender:Connect(function ()
         print("prerender")
     end)
