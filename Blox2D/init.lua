@@ -16,7 +16,7 @@ Blox2D._ErrorMessages = {
 local MyPath = "Blox2D."
 require(MyPath.."Utils")
 require(MyPath.."DataTypes")
-require(MyPath.."Classes")
+Blox2D._Classes = require(MyPath.."Classes")
 
 Blox2D._Draw = ScriptSignal.new()
 
@@ -53,9 +53,7 @@ camera.Parent = workspace
 workspace.CurrentCamera = camera
 camera = nil
 --workspace.CurrentCamera = Instance.new("Camera", workspace)
-local rsclass = require("Blox2D.Classes.runservice")
-Instance._Dictionary["Run Service"] = rsclass
-game:_AddService(rsclass.new())
+
 
 Blox2D.quit = function()
     --table.print(table.create(1000, "e"))

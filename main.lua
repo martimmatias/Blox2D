@@ -27,7 +27,7 @@ function love.load()
     parent.Transparency = 1
     parent.Parent = workspace--]]
 
-    --[[for i = 1, 2 do
+    for i = 1, 2 do
         local part = Instance.new("BasePart")
         part.Position = Vector2.new(i*90, i*90)
         part.ZIndex = i
@@ -50,4 +50,9 @@ function love.load()
         return instance
     end--]]
 
+    local runservice = game:GetService("Run Service")
+    --table.print(runservice)
+    runservice.PreRender:Connect(function ()
+        print("prerender")
+    end)
 end

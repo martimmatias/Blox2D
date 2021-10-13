@@ -5,8 +5,7 @@ local ErrorMessages = {
 }
 local Instance = {}
 
-local Dictionary = {}
-Instance._Dictionary = Dictionary
+local classesPath = "Blox2D.Classes."
 
 local InstanceTemplate = {
     _Name = "Instance",
@@ -197,7 +196,7 @@ local metatable = {
 }
 Instance._metatable = metatable
 
-Instance.new = function(className, parent)
+--[[Instance.new = function(className, parent)
     local instance = DeepCopy(InstanceTemplate)
     rawset(instance, "Changed", ScriptSignal.new())
     rawset(instance, "ChildAdded", ScriptSignal.new())
@@ -212,12 +211,30 @@ Instance.new = function(className, parent)
         instance.Parent = parent
     end
     return instance
+end--]]
+
+Instance.new = function (className, parent)
+    local instance
+    if className ~= nil then
+        Check("Instance.new", "string", className, "className")
+        instance = Blox2D._Classes[className].new()
+    else
+        instance = DeepCopy(InstanceTemplate)
+        rawset(instance, "Changed", ScriptSignal.new())
+        rawset(instance, "ChildAdded", ScriptSignal.new())
+        rawset(instance, "ChildRemoved", ScriptSignal.new())
+        rawset(instance, "AncestryChanged", ScriptSignal.new())
+    end
+    if type(parent) == "table" and typeof(parent) == "Instance" then
+        instance.Parent = parent
+    end
+    return instance
 end
 
-function _Inherit(parentClass, newType, __getters_metatable, __setters_metatable)
+function _Inherit(parentClass, newClassName, __getters_metatable, __setters_metatable)
     local newClass = {}
     newClass._Table = setmetatable({
-        __type = newType,
+        __type = parentClass._Table.__type,
         __getters = setmetatable({}, parentClass.__getters_metatable),
         __setters = setmetatable({}, parentClass.__setters_metatable),
     }, {__index = parentClass._Table})
@@ -245,8 +262,8 @@ function _Inherit(parentClass, newType, __getters_metatable, __setters_metatable
     return newClass, Table, getters, Table.__setters, function ()
         local instance = parentClass.new()
         setmetatable(instance, newClass._metatable)
-        table.insert(instance._ClassNames, newType)
-        rawset(instance, "_Name", newType)
+        table.insert(instance._ClassNames, newClassName)
+        rawset(instance, "_Name", newClassName)
         return instance
     end
 end
