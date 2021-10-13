@@ -41,7 +41,7 @@ function Table.__setters:CurrentCamera(instance)
 end
 
 function Table:Destroy()
-    error(Blox2D._ErrorMessages.CollonFunction:format("Destroy"))
+    error(Blox2D._ErrorMessages.CantCollonFunction:format("Destroy", tostring(self)))
 end
 
 local metatable = {

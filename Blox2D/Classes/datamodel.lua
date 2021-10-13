@@ -16,7 +16,7 @@ function DataModelTable:BindToClose(func)
 end
 
 function DataModelTable:Destroy()
-    error(Blox2D._ErrorMessages.CollonFunction:format("Destroy"))
+    error(Blox2D._ErrorMessages.CantCollonFunction:format("Destroy", tostring(self)))
 end
 
 local metatable = {

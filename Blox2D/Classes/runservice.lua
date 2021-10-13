@@ -9,6 +9,10 @@ function Table:Stop()
     love.event.quit()
 end
 
+function Table:Destroy()
+    error(Blox2D._ErrorMessages.CantCollonFunction:format("Destroy", tostring(self)))
+end
+
 Class.new = function ()
     local instance = newFunc()
     rawset(instance, "PreRender", ScriptSignal.new())

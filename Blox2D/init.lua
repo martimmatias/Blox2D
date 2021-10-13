@@ -10,7 +10,8 @@ Blox2D._ErrorMessages = {
     __mul = "Attempted multiply operation on %s and %s (%s)",
     __add = "Attempted addition operation on %s and %s (%s)",
     __sub = "Attempted subtraction operation on %s and %s (%s)",
-    CollonFunction = ":%s()"
+    CollonFunction = ":%s()",
+    CantCollonFunction = "Can't use :%s() on %s",
 }
 local MyPath = "Blox2D."
 require(MyPath.."Utils")
@@ -52,6 +53,9 @@ camera.Parent = workspace
 workspace.CurrentCamera = camera
 camera = nil
 --workspace.CurrentCamera = Instance.new("Camera", workspace)
+local rsclass = require("Blox2D.Classes.runservice")
+Instance._Dictionary["Run Service"] = rsclass
+game:_AddService(rsclass.new())
 
 Blox2D.quit = function()
     --table.print(table.create(1000, "e"))
