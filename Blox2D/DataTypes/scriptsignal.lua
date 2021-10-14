@@ -27,6 +27,9 @@ function ScriptSignalTable:Fire(...)
     for i = 1, #self.Connections do
         self.Connections[i].Func(unpack(args))
     end
+    --[[for i = #rawget(self, "_Waits"), 1, -1 do
+        self._Waits[i](unpack(args))
+    end--]]
 end
 
 local metatable = {
@@ -40,6 +43,7 @@ ScriptSignal.new = function()
     local signal = {
         --Name = name or "ScriptSignal",
         Connections = {},
+        --_Waits = {}
     }
     setmetatable(signal, metatable)
     return signal
