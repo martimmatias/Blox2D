@@ -27,15 +27,24 @@ function love.load()
     parent.Transparency = 1
     parent.Parent = workspace--]]
 
+    local model = Instance.new("Model", workspace)
+
     for i = 1, 2 do
         local part = Instance.new("BasePart")
         part.Position = Vector2.new(i*90, i*90)
         part.ZIndex = i
         part.Transparency = i*0.25
-        part.Parent = workspace--parent
+        part.Parent = model--parent
     end
 
-    workspace.BasePart.BrickColor = BrickColor.Red()--]]
+    model.BasePart.BrickColor = BrickColor.Red()
+
+    local model2 = Instance.new("Model", model)
+    local part = Instance.new("BasePart")
+    part.Position = Vector2.new(180, 90)
+    part.Parent = model2
+
+    model:MoveTo(Vector2.new(100, 340))
 
     --parent.BasePart.Parent = workspace
 
@@ -50,10 +59,10 @@ function love.load()
         return instance
     end--]]
 
-    local runservice = game:GetService("Run Service")
+    --[[local runservice = game:GetService("Run Service")
     --table.print(runservice)
     print(runservice)
     runservice.PreRender:Connect(function ()
         print("prerender")
-    end)
+    end)--]]
 end

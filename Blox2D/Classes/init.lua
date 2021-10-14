@@ -12,4 +12,5 @@ return {
     Workspace = require(MyPath.."workspace"),
     ["Run Service"] = require(MyPath.."runservice"),
     Camera = require(MyPath.."camera"),
+    Model = require(MyPath.."model")
 }
