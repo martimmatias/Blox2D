@@ -8,6 +8,7 @@ end
 
 function love.update(dt)
     Blox2D.update(dt)
+    workspace.Model.BasePart.Rotation = workspace.Model.BasePart.Rotation+dt*1
 end
 
 function love.quit()
@@ -17,47 +18,29 @@ end
 function love.load()
     --local brickColor = BrickColor.new("Bright red")
     --table.print(brickColor)
-    
-    
-    --[[local parent = Instance.new("BasePart")
-    parent.Name = "Parent Part"
-    parent.Position = Vector2.new(2*90, 2*90)
-    parent.Size = Vector2.new(10,10)
-    parent.ZIndex = 2
-    parent.Transparency = 1
-    parent.Parent = workspace--]]
 
     local model = Instance.new("Model", workspace)
 
     for i = 1, 2 do
         local part = Instance.new("BasePart")
-        part.Position = Vector2.new(i*90, i*90)
+        part.Position = Vector2.new((i-1)*100, (i-1)*0)
         part.ZIndex = i
-        part.Transparency = i*0.25
+        part.Transparency = (i-1)*0.4
+        part.BrickColor = BrickColor.palette(i)
         part.Parent = model--parent
     end
 
-    model.BasePart.BrickColor = BrickColor.Red()
+    
 
     local model2 = Instance.new("Model", model)
     local part = Instance.new("BasePart")
-    part.Position = Vector2.new(180, 90)
+    part.Position = Vector2.new(0, 105)
+    part.BrickColor = BrickColor.Red()
     part.Parent = model2
 
-    model:MoveTo(Vector2.new(100, 340))
+    model:MoveTo(Vector2.new(600, 400))
 
-    --parent.BasePart.Parent = workspace
-
-    --parent.BrickColor = BrickColor.Red()
-
-    --[[local testClass, tbl, getters, setters, newFunc = _Inherit(Instance, "Test", Instance.__getters_metatable, Instance.__setters_metatable)
-    --table.print(testClass)
-
-    testClass.new = function ()
-        local instance = newFunc()
-        rawset(instance, "_Test", true)
-        return instance
-    end--]]
+    workspace.CurrentCamera.Position = Vector2.new(0, 0)
 
     --[[local runservice = game:GetService("Run Service")
     --table.print(runservice)

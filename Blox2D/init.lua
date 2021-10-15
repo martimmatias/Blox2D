@@ -96,8 +96,25 @@ Blox2D.draw = function()
         return
     end
     love.graphics.push()
-    love.graphics.translate(rawget(workspace.CurrentCamera, "_Position").X, rawget(workspace.CurrentCamera, "_Position").Y)
+    
+    local cameraX = rawget(workspace.CurrentCamera, "_Position").X
+    local cameraY = rawget(workspace.CurrentCamera, "_Position").Y
+
+    local position
+    local size
+    love.graphics.translate(cameraX, cameraY)
+    
     for i, instance in pairs(DrawOrder) do
+       --love.graphics.origin()
+        love.graphics.push()
+
+        size = rawget(instance, "_Size")
+        position = rawget(instance, "_Position")
+
+        love.graphics.translate(position.X, position.Y)
+        love.graphics.rotate(math.rad(rawget(instance, "_Rotation")))
+        love.graphics.translate(-size.X/2, -size.Y/2)
+        
         love.graphics.setColor(
             rawget(instance, "_Color").R,
             rawget(instance, "_Color").G,
@@ -106,13 +123,16 @@ Blox2D.draw = function()
         )
         love.graphics.rectangle(
         "fill",
-        rawget(instance, "_Position").X,
-        rawget(instance, "_Position").Y,
-        rawget(instance, "_Size").X,
-        rawget(instance, "_Size").Y
+        0,
+        0,
+        size.X,
+        size.Y
         )
+        love.graphics.pop()
     end
+    
     love.graphics.pop()
+    
     --print((love.timer.getTime()-start)*1000)
 end
 love.draw = Blox2D.draw
