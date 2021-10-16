@@ -156,8 +156,37 @@ end
 function InstanceTable:Destroy()
     self.Parent = nil
 end
+
+local function _CloneObjectTable(tbl, _clone)
+    local vType
+    local clone = _clone or {}
+    for i, v in pairs(tbl) do
+        if type(v) == "table" then
+            vType = typeof(v)
+            if vType == nil then
+                rawset(clone, i, _CloneObjectTable(v))
+            elseif vType == "ScriptSignal" then
+                rawset(clone, i, ScriptSignal.new())
+            elseif vType == "Instance" then
+                rawset(clone, i, v:Clone())
+            elseif vType == "EnumItem" then
+                rawset(clone, i, v)
+            else
+                rawset(clone, i, setmetatable(DeepCopy(v), getmetatable(v)))
+            end
+        else
+            rawset(clone, i, v)
+        end
+    end
+    return clone
+end
+
 function InstanceTable:Clone()
-    error("Instance:Clone() not implemented yet!")
+    --error("Instance:Clone() not implemented yet!")
+    local clone = Instance.new(self.ClassName)
+    _CloneObjectTable(self, clone)
+    
+    return clone
 end
 
 function InstanceTable:Set(index, value)
@@ -171,6 +200,7 @@ function InstanceTable:Set(index, value)
         signal:Fire()
     end
 end
+
 function InstanceTable:Get(index)
     return rawget(self, "_"..index)
 end
