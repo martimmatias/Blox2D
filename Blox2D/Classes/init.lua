@@ -8,6 +8,10 @@ require(MyPath.."camera")--]]
 return {
     ServiceProvider = require(MyPath.."serviceprovider"),
     DataModel = require(MyPath.."datamodel"),
+    UserInputService = require(MyPath.."userinputservice"),
+    ReplicatedStorage = require(MyPath.."replicatedstorage"),
+    ServerStorage = require(MyPath.."serverstorage"),
+    ServerScriptService = require(MyPath.."serverscriptservice"),
     BasePart = require(MyPath.."basepart"),
     Workspace = require(MyPath.."workspace"),
     ["Run Service"] = require(MyPath.."runservice"),

@@ -48,6 +48,10 @@ game = Instance.new("DataModel")
 game.Name = "game"
 
 local RunService = game:GetService("Run Service")
+local UserInputService = game:GetService("UserInputService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerStorage = game:GetService("ServerStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
 
 ---@diagnostic disable-next-line: lowercase-global
 workspace = game:GetService("Workspace")
@@ -76,7 +80,7 @@ end
 love.update = Blox2D.update
 
 Blox2D.focus = function(focus)
-    
+    print(focus)
 end
 love.focus = Blox2D.focus
 
