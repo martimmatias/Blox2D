@@ -23,9 +23,12 @@ end
 
 DeepCopy = function(tbl)
     local copy = {}
+    --local meta
     for i, v in pairs(tbl) do
         if type(v) == "table" then
+            --meta = getmetatable(v)
             v = DeepCopy(v)
+            --setmetatable(v, meta)
         end
         copy[i] = v
     end
