@@ -8,7 +8,7 @@ end
 
 function love.update(dt)
     Blox2D.update(dt)
-    workspace.Model.BasePart.Rotation = workspace.Model.BasePart.Rotation+dt*1
+    workspace.Model.BasePart.Rotation = workspace.Model.BasePart.Rotation+dt*45
 end
 
 function love.quit()
@@ -26,7 +26,7 @@ function love.load()
         part.Position = Vector2.new((i-1)*100, (i-1)*0)
         part.ZIndex = i
         part.Transparency = (i-1)*0.4
-        part.BrickColor = BrickColor.palette(i)
+        part.BrickColor = BrickColor.palette(i*16)
         part.Parent = model--parent
     end
 
@@ -38,10 +38,13 @@ function love.load()
     part.BrickColor = BrickColor.Red()
     part.Parent = model2
 
-    model:MoveTo(Vector2.new(600, 400))
+    model:MoveTo(Vector2.new(100, 400))
 
-    workspace.CurrentCamera.Position = Vector2.new(0, 0)
+    workspace.CurrentCamera.Position = Vector2.new(200, 0)
 
+    --print(Enum.KeyCode.Zero.Name, Enum.KeyCode.Zero.Value, Enum.KeyCode[48].Value)
+    --local clone = part:Clone()
+    --clone.Position = clone.Position+Vector2.new(300, 0)
     --[[local runservice = game:GetService("Run Service")
     --table.print(runservice)
     print(runservice)
