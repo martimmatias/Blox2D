@@ -10,7 +10,15 @@ end
 
 local metatable = {
     __index = function (tbl, index)
-        return Table[index] or tbl._EnumItems[index]
+        local e = Table[index]
+        if e ~= nil then
+            return e
+        end
+        if type == "number" then
+            return tbl._EnumItems[index+1]
+        else
+            return tbl._EnumItems[index]
+        end
     end,
     __newindex = function (tbl, index, value)
         error(Blox2D._ErrorMessages.__newindex:format(Table.__type, tostring(index), tostring(value), type(value)))
@@ -18,19 +26,17 @@ local metatable = {
 }
 
 EnumType.new = function(...)
+    local args = {...}
     local enum = setmetatable({
-        ["_EnumItems"] = {...}
+        ["_EnumItems"] = {}
     }, metatable)
 
-    for i = 1, #enum._EnumItems do
-        local enumType = enum._EnumItems[i]
-        enum._EnumItems[enumType.Name] = enumType
-        enumType = nil
-    end
-    for _, v in pairs(enum._EnumItems) do
+    for i, v in pairs(args) do
+        enum._EnumItems[v.Number+1] = v
+        enum._EnumItems[v.Name] = v
         rawset(v, "EnumType", enum)
-        
     end
+
     return enum
 end
 
