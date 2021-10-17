@@ -4,6 +4,9 @@ Class.new = function ()
     local instance = newFunc()
     rawset(instance, "WindowFocused", ScriptSignal.new())
     rawset(instance, "WindowFocusReleased", ScriptSignal.new())
+    rawset(instance, "InputBegan", ScriptSignal.new())
+    rawset(instance, "InputChanged", ScriptSignal.new())
+    rawset(instance, "InputEnded", ScriptSignal.new())
     return instance
 end
 
