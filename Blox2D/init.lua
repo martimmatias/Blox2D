@@ -91,6 +91,16 @@ Blox2D.resize = function(w, h)
 end
 love.resize = Blox2D.resize
 
+Blox2D.keypressed = function(key, scanCode, isRepeat)
+    UserInputService.InputBegan:Fire()
+end
+love.keypressed = Blox2D.keypressed
+
+Blox2D.keyreleased = function (key, scanCode)
+    
+end
+love.keyreleased = Blox2D.keyreleased
+
 Blox2D.draw = function()
     RunService.PreRender:Fire()
     RunService.RenderStepped:Fire()
