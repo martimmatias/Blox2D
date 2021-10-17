@@ -14,7 +14,7 @@ local metatable = {
         if e ~= nil then
             return e
         end
-        if type == "number" then
+        if type(index) == "number" then
             return tbl._EnumItems[index+1]
         else
             return tbl._EnumItems[index]
@@ -32,7 +32,7 @@ EnumType.new = function(...)
     }, metatable)
 
     for i, v in pairs(args) do
-        enum._EnumItems[v.Number+1] = v
+        enum._EnumItems[v.Value+1] = v
         enum._EnumItems[v.Name] = v
         rawset(v, "EnumType", enum)
     end
