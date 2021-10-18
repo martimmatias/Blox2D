@@ -199,6 +199,23 @@ function InstanceTable:Set(index, value)
     if signal ~= nil then
         signal:Fire()
     end
+    return true
+end
+
+function InstanceTemplate:_SetEnum(index, value, enumType)
+    local valueType = type(value)
+    local EnumItem
+
+    if valueType == "table" and typeof(value) == "EnumItem" then
+        assert(value.EnumType == enumType, Blox2D._ErrorMessages.WrongEnumType:format(value.EnumType, enumType))
+        EnumItem = value
+    elseif valueType == "number" or valueType == "string" then
+        assert(enumType[value] ~= nil, error(Blox2D._ErrorMessages.__newindex:format(self, index, tostring(value), type(value))))
+        EnumItem = enumType[value]
+    else
+        error(Blox2D._ErrorMessages.__newindex:format(self, index, tostring(value), type(value)))
+    end
+    return self:Set(index, value)
 end
 
 function InstanceTable:Get(index)
