@@ -16,6 +16,14 @@ function setters:KeyCode(value)
     self:_SetEnum("KeyCode", value, Enum.KeyCode)
 end
 
+function setters:UserInputState(value)
+    self:_SetEnum("UserInputState", value, Enum.UserInputState)
+end
+
+function setters:UserInputType(value)
+    self:_SetEnum("UserInputType", value, Enum.UserInputType)
+end
+
 Class.new = function ()
     local instance = newFunc()
     rawset(instance, "_Delta", Vector2.new())
