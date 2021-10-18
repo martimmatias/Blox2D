@@ -116,7 +116,7 @@ local keyCodes = {
         EnumItem.new("NumLock", 300),
         EnumItem.new("ScrollLock", 302),
         EnumItem.new("LeftSuper", 311),
-        EnumItem.new("RightSupper", 312),
+        EnumItem.new("RightSuper", 312),
         EnumItem.new("Mode", 313),
         EnumItem.new("Compose", 314),
         EnumItem.new("Help", 315),
@@ -173,7 +173,12 @@ local EnumTypes = {
         table.unpack(keyCodes)
     )
 }
---(str:gsub("^%l", string.upper))
+
+local _Name, _EnumType
+for _Name, _EnumType in pairs(EnumTypes) do
+    rawset(_EnumType, "_Name", _Name)
+end
+
 local Enum = setmetatable({}, {
     __index = EnumTypes,
     __newindex = function (tbl, index, value)
