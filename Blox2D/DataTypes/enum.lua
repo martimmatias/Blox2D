@@ -171,6 +171,29 @@ local EnumTypes = {
     PartShape = EnumType.new(EnumItem.new("Rectangle", 1), EnumItem.new("Sphere", 0)),
     KeyCode = EnumType.new(
         table.unpack(keyCodes)
+    ),
+    UserInputType = EnumType.new(
+        EnumItem.new("MouseButton1", 0),
+        EnumItem.new("MouseButton2", 1),
+        EnumItem.new("MouseButton3", 2),
+        EnumItem.new("MouseButtonWheel", 3),
+        EnumItem.new("MouseButtonMovement", 4),
+        EnumItem.new("Touch", 7),
+        EnumItem.new("Keyboard", 8),
+        EnumItem.new("Focus", 9),
+        EnumItem.new("Accelerometer", 10),
+        EnumItem.new("Gyro", 11),
+        EnumItem.new("Gamepad1", 12),
+        EnumItem.new("Gamepad2", 13),
+        EnumItem.new("Gamepad3", 14),
+        EnumItem.new("Gamepad4", 15),
+        EnumItem.new("Gamepad5", 16),
+        EnumItem.new("Gamepad6", 17),
+        EnumItem.new("Gamepad7", 18),
+        EnumItem.new("Gamepad8", 19),
+        EnumItem.new("TextInput", 20),
+        EnumItem.new("InputMethod", 21),
+        EnumItem.new("None", 22)
     )
 }
 
