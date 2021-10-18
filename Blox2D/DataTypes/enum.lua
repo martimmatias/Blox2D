@@ -194,6 +194,13 @@ local EnumTypes = {
         EnumItem.new("TextInput", 20),
         EnumItem.new("InputMethod", 21),
         EnumItem.new("None", 22)
+    ),
+    UserInputState = EnumType.new(
+        EnumItem.new("Begin", 0),
+        EnumItem.new("Change", 1),
+        EnumItem.new("End", 2),
+        EnumItem.new("Cancel", 3),
+        EnumItem.new("None", 4)
     )
 }
 
