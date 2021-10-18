@@ -12,6 +12,7 @@ Blox2D._ErrorMessages = {
     __sub = "Attempted subtraction operation on %s and %s (%s)",
     CollonFunction = ":%s()",
     CantCollonFunction = "Can't use :%s() on %s",
+    WrongEnumType = "%s is not of the %s EnumType!",
 }
 
 local MyPath = "Blox2D."
@@ -92,7 +93,7 @@ end
 love.resize = Blox2D.resize
 
 Blox2D.keypressed = function(key, scanCode, isRepeat)
-    UserInputService.InputBegan:Fire()
+    UserInputService:_NewInputObject(key)
 end
 love.keypressed = Blox2D.keypressed
 
