@@ -12,8 +12,15 @@ function setters:Position(vector)
     self:Set("Position", vector)
 end
 
+function setters:KeyCode(value)
+    self:_SetEnum("KeyCode", value, Enum.KeyCode)
+end
+
 Class.new = function ()
-    return newFunc()
+    local instance = newFunc()
+    rawset(instance, "_Delta", Vector2.new())
+    rawset(instance, "_Position", Vector2.new())
+    return instance
 end
 
 return Class
