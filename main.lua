@@ -42,6 +42,18 @@ function love.load()
 
     workspace.CurrentCamera.Position = Vector2.new(200, 0)
 
+    local UserInputService = game:GetService("UserInputService")
+    local testInputObject
+    UserInputService.InputBegan:Connect(function (inputObject, uiProcessed)
+        if inputObject.KeyCode == Enum.KeyCode.Comma then
+            testInputObject = inputObject
+        end
+    end)
+    UserInputService.InputEnded:Connect(function (inputObject, uiProcessed)
+        if testInputObject == inputObject then
+            print(testInputObject.UserInputState.Name)
+        end
+    end)
     --print(Enum.KeyCode.Zero.Name, Enum.KeyCode.Zero.Value, Enum.KeyCode[48].Value)
     --local clone = part:Clone()
     --clone.Position = clone.Position+Vector2.new(300, 0)
