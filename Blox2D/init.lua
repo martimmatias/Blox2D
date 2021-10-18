@@ -92,15 +92,162 @@ Blox2D.resize = function(w, h)
 end
 love.resize = Blox2D.resize
 
+local keyToKeyCodeName = {
+    [string.char(34)] = "QuotedDouble",
+    ["#"] = "Hash",
+    ["$"] = "Dollar",
+    ["%"] = "Percent",
+    ["&"] = "Ampersand",
+    [string.char(39)] = "Quote",
+    ["("] = "LeftParenthesis",
+    [")"] = "RightParenthesis",
+    ["*"] = "Asterisk",
+    ["+"] = "Plus",
+    [","] = "Comma",
+    ["-"] = "Minus",
+    ["."] = "Period",
+    ["/"] = "Slash",
+    ["0"] = "Zero",
+    ["1"] = "One",
+    ["2"] = "Two",
+    ["3"] = "Three",
+    ["4"] = "Four",
+    ["5"] = "Five",
+    ["6"] = "Six",
+    ["7"] = "Seven",
+    ["8"] = "Eight",
+    ["9"] = "Nine",
+    [":"] = "Colon",
+    [";"] = "Semicolon",
+    ["<"] = "LessThan",
+    ["="] = "Equals",
+    [">"] = "GreaterThan",
+    ["?"] = "Question",
+    ["@"] = "At",
+    ["["] = "LeftBracket",
+    [string.char(92)] = "BackSlash",
+    ["]"] = "RightBracket",
+    ["^"] = "Caret",
+    ["_"] = "Underscore",
+    ["`"] = "Backquote",
+    ["{"] = "LeftCurly",
+    ["|"] = "Pipe",
+    ["}"] = "RightCurly",
+    ["~"] = "Tilde",
+    ["kp0"] = "KeyPadZero",
+    ["kp1"] = "KeyPadOne",
+    ["kp2"] = "KeyPadTwo",
+    ["kp3"] = "KeyPadThree",
+    ["kp4"] = "KeyPadFour",
+    ["kp5"] = "KeyPadFive",
+    ["kp6"] = "KeyPadSix",
+    ["kp7"] = "KeyPadSeven",
+    ["kp8"] = "KeyPadEight",
+    ["kp9"] = "KeyPadNine",
+    ["kp."] = "KeyPadPeriod",
+    ["kp/"] = "KeyPadDivide",
+    ["kp*"] = "KeyPadMultiply",
+    ["kp-"] = "KeyPadMinus",
+    ["kp+"] = "KeyPad+",
+    ["kpenter"] = "KeyPadEnter",
+    ["kp="] = "KeyPadEquals",
+    ["pageup"] = "PageUp",
+    ["pagedown"] = "PageDown",
+    ["lshift"] = "LeftShift",
+    ["rshift"] = "RightShift",
+    ["lalt"] = "LeftAlt",
+    ["ralt"] = "RightAlt",
+    ["lctrl"] = "LeftControl",
+    ["rctrl"] = "RightControl",
+    ["capslock"] = "CapsLock",
+    ["numlock"] = "NumLock",
+    ["scrollock"] = "ScrollLock",
+    ["lgui"] = "LeftSuper",
+    ["rgui"] = "RightSuper",
+    ["printscreen"] = "Print",
+    ["sysreq"] = "SysReq",
+    ["currencyunit"] = "Euro",
+    
+}
+local InputObjects = {}
 Blox2D.keypressed = function(key, scanCode, isRepeat)
-    UserInputService:_NewInputObject(key)
+    local keyCode = Enum.KeyCode[key] or Enum.KeyCode[keyToKeyCodeName[key]]
+    if keyCode == nil then
+        warn(keyCode, "does not have a corresponding KeyCode Enum")
+        return
+    end
+    local inputObject = Instance.new("InputObject")
+    inputObject.KeyCode = keyCode
+    inputObject.UserInputState = Enum.UserInputState.Begin
+    inputObject.UserInputType = Enum.UserInputType.Keyboard
+    InputObjects[key] = inputObject
+    UserInputService.InputBegan:Fire(inputObject, false)
+    --UserInputService:_NewInputObject(key)
 end
 love.keypressed = Blox2D.keypressed
 
 Blox2D.keyreleased = function (key, scanCode)
-    
+    --local keyCode = Enum.KeyCode[key] or Enum.KeyCode[keyToKeyCodeName[key]]
+    --if keyCode == nil then return end
+    local inputObject = InputObjects[key]
+    if inputObject ~= nil then
+        inputObject.UserInputState = Enum.UserInputState.End
+        UserInputService.InputEnded:Fire(inputObject, false)
+    end
 end
 love.keyreleased = Blox2D.keyreleased
+
+Blox2D.mousepressed = function (x, y, button, isTouch)
+    if button > 3 then
+        return
+    end
+    local inputObject = Instance.new("InputObject")
+    inputObject.UserInputState = Enum.UserInputState.Begin
+    inputObject.Position = Vector2.new(x, y)
+
+    if isTouch == true then
+        inputObject.UserInputType = Enum.UserInputType.Touch
+    else
+        inputObject.UserInputType = Enum.UserInputType["MouseButton"..tostring(button)]
+    end
+    InputObjects[inputObject.UserInputType.Name] = inputObject
+    UserInputService.InputBegan:Fire(inputObject, false)
+end
+love.mousepressed = Blox2D.mousepressed
+
+Blox2D.mousereleased = function (x, y, button, isTouch, presses)
+    if button > 3 then
+        return
+    end
+    local inputObject
+    if isTouch == true then
+        inputObject = InputObjects["Touch"]
+    else
+        inputObject = InputObjects["MouseButton"..tostring(button)]
+    end
+    if inputObject ~= nil then
+        inputObject.Position = Vector2.new(x, y)
+        inputObject.UserInputState = Enum.UserInputState.End
+        UserInputService.InputEnded:Fire(inputObject, false)
+    end
+end
+love.mousereleased = Blox2D.mousereleased
+
+Blox2D.mousemoved = function (x, y, dx, dy, isTouch)
+    local inputObject = InputObjects["MouseMovement"]
+    if inputObject == nil then
+        Instance.new("InputObject")
+        inputObject.Position = Vector2.new(x, y)
+        InputObjects["MouseMovement"] = inputObject
+    end
+    rawset(inputObject.Position, "X", x)
+    rawset(inputObject.Position, "Y", y)
+    rawset(inputObject.Delta, "X", dx)
+    rawset(inputObject.Delta, "Y", dy)
+    inputObject.UserInputState = Enum.UserInputState.Change
+    UserInputService.InputChanged:Fire(inputObject, false)
+end
+love.mousemoved = Blox2D.mousemoved
 
 Blox2D.draw = function()
     RunService.PreRender:Fire()
