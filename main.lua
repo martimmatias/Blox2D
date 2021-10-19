@@ -16,6 +16,7 @@ function love.quit()
 end
 
 function love.load()
+    Blox2D.load()
     --local brickColor = BrickColor.new("Bright red")
     --table.print(brickColor)
 
