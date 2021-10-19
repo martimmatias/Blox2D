@@ -12,10 +12,13 @@ return {
     ReplicatedStorage = require(MyPath.."replicatedstorage"),
     ServerStorage = require(MyPath.."serverstorage"),
     ServerScriptService = require(MyPath.."serverscriptservice"),
+    Players = require(MyPath.."players"),
+    BasePlayerGui = require(MyPath.."baseplayergui"),
+    StarterGui = require(MyPath.."startergui"),
     BasePart = require(MyPath.."basepart"),
     Workspace = require(MyPath.."workspace"),
     ["Run Service"] = require(MyPath.."runservice"),
     Camera = require(MyPath.."camera"),
     Model = require(MyPath.."model"),
-    InputObject = require(MyPath.."inputobject")
+    InputObject = require(MyPath.."inputobject"),
 }

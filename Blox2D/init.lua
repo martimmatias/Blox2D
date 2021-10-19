@@ -53,6 +53,8 @@ local UserInputService = game:GetService("UserInputService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
 
 ---@diagnostic disable-next-line: lowercase-global
 workspace = game:GetService("Workspace")
