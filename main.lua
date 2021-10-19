@@ -36,6 +36,7 @@ function love.load()
     local part = Instance.new("BasePart")
     part.Position = Vector2.new(0, 105)
     part.BrickColor = BrickColor.Red()
+    part.PartShape = Enum.PartShape.Circle
     part.Parent = model2
 
     model:MoveTo(Vector2.new(100, 400))

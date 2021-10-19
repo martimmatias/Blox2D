@@ -236,7 +236,7 @@ love.mousereleased = Blox2D.mousereleased
 Blox2D.mousemoved = function (x, y, dx, dy, isTouch)
     local inputObject = InputObjects["MouseMovement"]
     if inputObject == nil then
-        Instance.new("InputObject")
+        inputObject = Instance.new("InputObject")
         inputObject.Position = Vector2.new(x, y)
         InputObjects["MouseMovement"] = inputObject
     end
@@ -283,13 +283,23 @@ Blox2D.draw = function()
             rawget(instance, "_Color").B,
             1-rawget(instance, "_Transparency")
         )
-        love.graphics.rectangle(
-        "fill",
-        0,
-        0,
-        size.X,
-        size.Y
-        )
+        if instance._PartShape == Enum.PartShape.Circle then
+            love.graphics.circle(
+                "fill",
+                0,
+                0,
+                size.X/2
+            )
+        else
+            love.graphics.rectangle(
+                "fill",
+                0,
+                0,
+                size.X,
+                size.Y
+            )
+        end
+        
         love.graphics.pop()
     end
     

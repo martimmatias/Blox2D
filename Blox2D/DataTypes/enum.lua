@@ -168,7 +168,7 @@ end
 
 
 local EnumTypes = {
-    PartShape = EnumType.new(EnumItem.new("Rectangle", 1), EnumItem.new("Sphere", 0)),
+    PartShape = EnumType.new(EnumItem.new("Rectangle", 1), EnumItem.new("Circle", 0)),
     KeyCode = EnumType.new(
         table.unpack(keyCodes)
     ),

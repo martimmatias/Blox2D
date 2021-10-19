@@ -56,6 +56,9 @@ function setters:Color(color)
         self:Set("BrickColor", BrickColor.new(color))
     end
 end
+function setters:PartShape(value)
+    self:_SetEnum("PartShape", value, Enum.PartShape)
+end
 
 function setters:Parent(value)
     --local wasDescendant = self:FindFirstAncestor("workspace")
@@ -117,6 +120,7 @@ Class.new = function ()
     rawset(instance, "_Transparency", 0)
     rawset(instance, "_BrickColor", BrickColor.new())
     rawset(instance, "_Color", instance.BrickColor.Color)
+    rawset(instance, "_PartShape", Enum.PartShape.Rectangle)
     rawset(instance, "Touched", ScriptSignal.new())
     rawset(instance, "Touchended", ScriptSignal.new())
     return instance
