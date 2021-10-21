@@ -201,6 +201,10 @@ local EnumTypes = {
         EnumItem.new("End", 2),
         EnumItem.new("Cancel", 3),
         EnumItem.new("None", 4)
+    ),
+    ZIndexBehavior = EnumType.new(
+        EnumItem.new("Global", 0),
+        EnumItem.new("Sibling", 1)
     )
 }
 
