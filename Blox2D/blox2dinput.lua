@@ -192,4 +192,12 @@ Input.wheelmoved = function(x, y)
     UserInputService.InputChanged:Fire(inputObject, false)
 end
 
+Input.focus = function (focus)
+    if focus then
+        UserInputService.WindowFocused:Fire()
+    else
+        UserInputService.WindowFocusReleased:Fire()
+    end
+end
+
 return Input

@@ -89,7 +89,7 @@ end
 love.update = Blox2D.update
 
 Blox2D.focus = function(focus)
-    print(focus)
+    Blox2D.Input.focus(focus)
 end
 love.focus = Blox2D.focus
 
