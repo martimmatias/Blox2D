@@ -20,6 +20,8 @@ require(MyPath.."Utils")
 require(MyPath.."DataTypes")
 Blox2D._Classes = require(MyPath.."Classes")
 
+local InputObjects = {}
+
 Blox2D._Draw = ScriptSignal.new()
 
 local function OrderDraw(instanceA, instanceB)
@@ -56,6 +58,8 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local Players = game:GetService("Players")
 local StarterGui = game:GetService("StarterGui")
 
+Blox2D.Input = require(MyPath.."blox2dinput")
+
 ---@diagnostic disable-next-line: lowercase-global
 workspace = game:GetService("Workspace")
 
@@ -76,9 +80,11 @@ end
 love.load = Blox2D.load()
 
 Blox2D.update = function(dt)
-    RunService.Stepped:Fire()
+    RunService.Stepped:Fire(0, dt)
+    
+    Blox2D.Input.update()
 
-    RunService.Heartbeat:Fire()
+    RunService.Heartbeat:Fire(dt)
 end
 love.update = Blox2D.update
 
@@ -94,162 +100,35 @@ Blox2D.resize = function(w, h)
 end
 love.resize = Blox2D.resize
 
-local keyToKeyCodeName = {
-    [string.char(34)] = "QuotedDouble",
-    ["#"] = "Hash",
-    ["$"] = "Dollar",
-    ["%"] = "Percent",
-    ["&"] = "Ampersand",
-    [string.char(39)] = "Quote",
-    ["("] = "LeftParenthesis",
-    [")"] = "RightParenthesis",
-    ["*"] = "Asterisk",
-    ["+"] = "Plus",
-    [","] = "Comma",
-    ["-"] = "Minus",
-    ["."] = "Period",
-    ["/"] = "Slash",
-    ["0"] = "Zero",
-    ["1"] = "One",
-    ["2"] = "Two",
-    ["3"] = "Three",
-    ["4"] = "Four",
-    ["5"] = "Five",
-    ["6"] = "Six",
-    ["7"] = "Seven",
-    ["8"] = "Eight",
-    ["9"] = "Nine",
-    [":"] = "Colon",
-    [";"] = "Semicolon",
-    ["<"] = "LessThan",
-    ["="] = "Equals",
-    [">"] = "GreaterThan",
-    ["?"] = "Question",
-    ["@"] = "At",
-    ["["] = "LeftBracket",
-    [string.char(92)] = "BackSlash",
-    ["]"] = "RightBracket",
-    ["^"] = "Caret",
-    ["_"] = "Underscore",
-    ["`"] = "Backquote",
-    ["{"] = "LeftCurly",
-    ["|"] = "Pipe",
-    ["}"] = "RightCurly",
-    ["~"] = "Tilde",
-    ["kp0"] = "KeyPadZero",
-    ["kp1"] = "KeyPadOne",
-    ["kp2"] = "KeyPadTwo",
-    ["kp3"] = "KeyPadThree",
-    ["kp4"] = "KeyPadFour",
-    ["kp5"] = "KeyPadFive",
-    ["kp6"] = "KeyPadSix",
-    ["kp7"] = "KeyPadSeven",
-    ["kp8"] = "KeyPadEight",
-    ["kp9"] = "KeyPadNine",
-    ["kp."] = "KeyPadPeriod",
-    ["kp/"] = "KeyPadDivide",
-    ["kp*"] = "KeyPadMultiply",
-    ["kp-"] = "KeyPadMinus",
-    ["kp+"] = "KeyPad+",
-    ["kpenter"] = "KeyPadEnter",
-    ["kp="] = "KeyPadEquals",
-    ["pageup"] = "PageUp",
-    ["pagedown"] = "PageDown",
-    ["lshift"] = "LeftShift",
-    ["rshift"] = "RightShift",
-    ["lalt"] = "LeftAlt",
-    ["ralt"] = "RightAlt",
-    ["lctrl"] = "LeftControl",
-    ["rctrl"] = "RightControl",
-    ["capslock"] = "CapsLock",
-    ["numlock"] = "NumLock",
-    ["scrollock"] = "ScrollLock",
-    ["lgui"] = "LeftSuper",
-    ["rgui"] = "RightSuper",
-    ["printscreen"] = "Print",
-    ["sysreq"] = "SysReq",
-    ["currencyunit"] = "Euro",
-    
-}
-local InputObjects = {}
 Blox2D.keypressed = function(key, scanCode, isRepeat)
-    local keyCode = Enum.KeyCode[key] or Enum.KeyCode[keyToKeyCodeName[key]]
-    if keyCode == nil then
-        warn(keyCode, "does not have a corresponding KeyCode Enum")
-        return
-    end
-    local inputObject = Instance.new("InputObject")
-    inputObject.KeyCode = keyCode
-    inputObject.UserInputState = Enum.UserInputState.Begin
-    inputObject.UserInputType = Enum.UserInputType.Keyboard
-    InputObjects[key] = inputObject
-    UserInputService.InputBegan:Fire(inputObject, false)
-    --UserInputService:_NewInputObject(key)
+    Blox2D.Input.keypressed(key, scanCode, isRepeat)
 end
 love.keypressed = Blox2D.keypressed
 
 Blox2D.keyreleased = function (key, scanCode)
-    --local keyCode = Enum.KeyCode[key] or Enum.KeyCode[keyToKeyCodeName[key]]
-    --if keyCode == nil then return end
-    local inputObject = InputObjects[key]
-    if inputObject ~= nil then
-        inputObject.UserInputState = Enum.UserInputState.End
-        UserInputService.InputEnded:Fire(inputObject, false)
-    end
+    Blox2D.Input.keyreleased(key, scanCode)
 end
 love.keyreleased = Blox2D.keyreleased
 
 Blox2D.mousepressed = function (x, y, button, isTouch)
-    if button > 3 then
-        return
-    end
-    local inputObject = Instance.new("InputObject")
-    inputObject.UserInputState = Enum.UserInputState.Begin
-    inputObject.Position = Vector2.new(x, y)
-
-    if isTouch == true then
-        inputObject.UserInputType = Enum.UserInputType.Touch
-    else
-        inputObject.UserInputType = Enum.UserInputType["MouseButton"..tostring(button)]
-    end
-    InputObjects[inputObject.UserInputType.Name] = inputObject
-    UserInputService.InputBegan:Fire(inputObject, false)
+    Blox2D.Input.mousepressed(x, y, button, isTouch)
 end
 love.mousepressed = Blox2D.mousepressed
 
 Blox2D.mousereleased = function (x, y, button, isTouch, presses)
-    if button > 3 then
-        return
-    end
-    local inputObject
-    if isTouch == true then
-        inputObject = InputObjects["Touch"]
-    else
-        inputObject = InputObjects["MouseButton"..tostring(button)]
-    end
-    if inputObject ~= nil then
-        inputObject.Position = Vector2.new(x, y)
-        inputObject.UserInputState = Enum.UserInputState.End
-        UserInputService.InputEnded:Fire(inputObject, false)
-    end
+    Blox2D.Input.mousereleased(x, y, button, isTouch, presses)
 end
 love.mousereleased = Blox2D.mousereleased
 
 Blox2D.mousemoved = function (x, y, dx, dy, isTouch)
-    local inputObject = InputObjects["MouseMovement"]
-    if inputObject == nil then
-        inputObject = Instance.new("InputObject")
-        inputObject.Position = Vector2.new(x, y)
-        InputObjects["MouseMovement"] = inputObject
-    end
-    rawset(inputObject.Position, "X", x)
-    rawset(inputObject.Position, "Y", y)
-    rawset(inputObject.Delta, "X", dx)
-    rawset(inputObject.Delta, "Y", dy)
-    inputObject.UserInputState = Enum.UserInputState.Change
-    UserInputService.InputChanged:Fire(inputObject, false)
+    Blox2D.Input.mousemoved(x, y, dx, dy, isTouch)
 end
 love.mousemoved = Blox2D.mousemoved
+
+Blox2D.wheelmoved = function(x, y)
+    Blox2D.Input.wheelmoved(x, y)
+end
+love.wheelmoved = Blox2D.wheelmoved
 
 Blox2D.draw = function()
     RunService.PreRender:Fire()
