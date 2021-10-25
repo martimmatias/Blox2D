@@ -1,44 +1,54 @@
 local Class, Table, getters, setters, newFunc = _Inherit(require("Blox2D.Classes.guibase2d"), "GuiObject")
 
+--_Layer is private
+function getters:Layer()
+    return
+end
+
 function setters:Parent(value)
-    --local wasDescendant = self:FindFirstAncestor("workspace")
     --default parent implementation
     Instance._Table.__setters.Parent(self, value)
 
-    local isDescendant = self:FindFirstAncestorOfClass("LayerCollector") and self:IsDescendantOf(game)
+    local oldLayerCollector = rawget(self, "_Layer")
+    local layerCollector = self:FindFirstAncestorOfClass("LayerCollector")
 
-    if rawget(self, "__Draw") then
-        --was descendant of workspace
-        if isDescendant == false then
-            --no longer descendant of workspace
-            --print("REMOVING FROM DRAW ORDER")
-            rawset(self, "__Draw", false)
-            Blox2D._RemoveFromDrawOrder(self)
-            return
+    if oldLayerCollector ~= nil then
+        --was descendant of a LayerCollector
+        if layerCollector == nil or layerCollector ~= oldLayerCollector then
+            --no longer descendant of a LayerCollector
+            --or changed LayerCollector
+            oldLayerCollector._Remove(self)
         end
     end
-
     --new parent is descendant of workspace, old parent wasn't
-    if value ~= nil and isDescendant == true then
-        --print("ADDING TO DRAW ORDER")
-        rawset(self, "__Draw", true)
-        Blox2D._AddToDrawOrder(self)
+    if value ~= nil and layerCollector ~= nil then
+        layerCollector._Add(self)
     end
+    rawset(self, "_Layer", layerCollector)
+end
+
+local destroyFunc = Table.Destroy
+function Table:Destroy()
+    destroyFunc(self)
+    rawset(self, "_Layer", nil)
 end
 
 function Table:_AncestryChanged(child, parent)
     Instance._Table._AncestryChanged(self, child, parent)
-    local isDescendant = self:FindFirstAncestorOfClass("LayerCollector") and self:IsDescendantOf(game)
+
+    local oldLayerCollector = rawget(self, "_Layer")
+    local layerCollector = self:FindFirstAncestorOfClass("LayerCollector")
 
     if parent ~= nil then
-        if isDescendant == true then
-            --print("ADDING TO DRAW ORDER")
-            Blox2D._AddToDrawOrder(self)
-        else
-            --print("REMOVING FROM DRAW ORDER")
-            Blox2D._RemoveFromDrawOrder(self)
+        if layerCollector ~= oldLayerCollector then
+            if oldLayerCollector ~= nil then
+                oldLayerCollector._Remove(self)
+            end
+            if layerCollector ~= nil then
+                layerCollector._Add(self)
+            end
         end
-        rawset(self, "__Draw", isDescendant)
+        rawset(self, "_Layer", layerCollector)
     end
 end
 
