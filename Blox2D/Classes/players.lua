@@ -12,6 +12,7 @@ end
 
 function Table:CreateLocalPlayer()
     local player = Instance.new("Player")
+    local playerGui = Instance.new("PlayerGui", player)
     player.Parent = self
     rawset(self, "_LocalPlayer", player)
     return player
