@@ -13,6 +13,8 @@ Class.new = function ()
     local instance = newFunc()
     rawset(instance, "_DisplayOrder", 0)
     rawset(instance, "_IgnoreGuiInset", false)
+    local w,h = love.graphics.getDimensions()
+    instance.AbsoluteSize = Vector2.new(w, h)
     return instance
 end
 

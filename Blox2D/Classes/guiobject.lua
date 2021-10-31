@@ -77,10 +77,42 @@ function setters:BorderSizePixel(value)
     self:Set("BorderSizePixel", value)
 end
 
+function setters:BackgroundColor3(color)
+    Check("Set(BackgroundColor3)", "table", color, "color")
+    if typeof(color) == "Color3" then
+        self:Set("BackgroundColor3", color)
+    end
+end
+
+function setters:BorderColor3(color)
+    Check("Set(BorderColor3)", "table", color, "color")
+    if typeof(color) == "Color3" then
+        self:Set("BorderColor3", color)
+    end
+end
+
 local destroyFunc = Table.Destroy
 function Table:Destroy()
     destroyFunc(self)
     rawset(self, "_Layer", nil)
+end
+
+function Table:_AbsoluteSizeChanged()
+    UpdateSize(self, self._Size)
+    for _, child in pairs(self._Children) do
+        if child:IsA("GuiObject") then
+            child:_AbsoluteSizeChanged()
+        end
+    end
+end
+
+function Table:_AbsolutePositionChanged()
+    UpdatePosition(self, self._Position)
+    for _, child in pairs(self._Children) do
+        if child:IsA("GuiObject") then
+            child:_AbsolutePositionChanged()
+        end
+    end
 end
 
 function Table:_AncestryChanged(child, parent)
@@ -167,7 +199,7 @@ Class.new = function()
     rawset(instance, "_BackgroundColor3", Color3.new(1,1,1))
     rawset(instance, "_BackgroundTransparency", 0)
     rawset(instance, "_BorderColor3", Color3.new(0,0,0))
-    rawset(instance, "_BorderSizePixel", 0)
+    rawset(instance, "_BorderSizePixel", 1)
     rawset(instance, "_ClipDescendants", false)
     rawset(instance, "_LayoutOrder", 0)
     rawset(instance, "_Rotation", 0)

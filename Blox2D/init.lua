@@ -71,13 +71,31 @@ workspace.CurrentCamera = camera
 camera = nil
 
 
+local function WindowSizeChanged(w, h)
+    print("RESIZED")
+    if workspace.CurrentCamera then
+        rawset(workspace.CurrentCamera, "_ViewportSize", Vector2.new(w, h))
+        for _, screenGui in pairs(Players.LocalPlayer.PlayerGui._Children) do
+            if screenGui:IsA("ScreenGui") then
+                screenGui.AbsoluteSize = Vector2.new(w, h)
+            end
+        end
+    end
+end
+
 Blox2D.quit = function()
     rawget(game, "_Close"):Fire()
 end
 love.quit = Blox2D.quit
 
 Blox2D.load = function()
-    
+    love.window.setTitle("Blox2D")
+    love.window.setMode( 1280, 720, {
+        resizable = true,
+        minwidth = 128,
+        minheight = 72
+    } )
+    WindowSizeChanged(1280, 720)
 end
 love.load = Blox2D.load()
 
@@ -96,9 +114,7 @@ end
 love.focus = Blox2D.focus
 
 Blox2D.resize = function(w, h)
-    if workspace.CurrentCamera then
-        rawset(workspace.CurrentCamera, "_ViewportSize", Vector2.new(w, h))
-    end
+    WindowSizeChanged(w, h)
 end
 love.resize = Blox2D.resize
 
