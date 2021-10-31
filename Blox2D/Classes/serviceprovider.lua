@@ -3,7 +3,7 @@ local Class, Table, getters, setters, newFunc = _Inherit(Instance, "ServiceProvi
 Class._Services = {}
 
 function Table:_AddService(service)
-    Class._Services[service.Name] = service
+    Class._Services[service.ClassName] = service
 end
 
 function Table:GetService(name)
