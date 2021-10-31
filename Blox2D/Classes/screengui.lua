@@ -1,5 +1,4 @@
 local Class, Table, getters, setters, newFunc = _Inherit(require("Blox2D.Classes.layercollector"), "ScreenGui")
-
 function setters:DisplayOrder(value)
     Check("Set(DisplayOrder)", "number", value, "value")
     self:Set("DisplayOrder", value)
