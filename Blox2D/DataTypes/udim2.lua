@@ -67,8 +67,8 @@ local metatable = {
 
 UDim2.new = function(xScale, xOffset, yScale, yOffset)
     local udim2 = {
-        X = UDim.new(xScale, xOffset),
-        Y = UDim.new(yScale, yOffset)
+        X = UDim.new(xScale or 0, xOffset or 0),
+        Y = UDim.new(yScale or 0, yOffset or 0)
     }
     setmetatable(udim2, metatable)
     return udim2
