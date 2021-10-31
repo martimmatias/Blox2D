@@ -1,9 +1,5 @@
 local Class, Table, getters, setters, newFunc = _Inherit(Instance, "UserInputService")
 
-
-
-
-
 --[[function Table:_NewInputObject(key)
     local keyCode = Enum.KeyCode[key] or keyToKeyCodeName[key]
     print(key, keyCode)
