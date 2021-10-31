@@ -50,12 +50,14 @@ end
 game = Instance.new("DataModel")
 game.Name = "game"
 
-local RunService = game:GetService("Run Service")
+local RunService = game:GetService("RunService")
+RunService.Name = "Run Service"
 local UserInputService = game:GetService("UserInputService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local Players = game:GetService("Players")
+Players:CreateLocalPlayer()
 local StarterGui = game:GetService("StarterGui")
 
 Blox2D.Input = require(MyPath.."blox2dinput")
@@ -138,6 +140,7 @@ Blox2D.draw = function()
         warn("CurrentCamera is nil!")
         return
     end
+
     love.graphics.push()
     
     local cameraX = rawget(workspace.CurrentCamera, "_Position").X
@@ -185,7 +188,15 @@ Blox2D.draw = function()
     end
     
     love.graphics.pop()
-    
+    love.graphics.origin()
+    love.graphics.push()
+
+    for _, child in pairs(Players.LocalPlayer.PlayerGui._Children) do
+        
+        child:_Draw()
+    end
+
+    love.graphics.pop()
     --print((love.timer.getTime()-start)*1000)
 end
 love.draw = Blox2D.draw

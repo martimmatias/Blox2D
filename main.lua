@@ -3,12 +3,11 @@ require"Blox2D"
 function love.draw()
     Blox2D.draw()
     love.graphics.print("Hello World!", 100, 100)
-    
 end
 
 function love.update(dt)
     Blox2D.update(dt)
-    workspace.Model.BasePart.Rotation = workspace.Model.BasePart.Rotation+dt*45
+    
 end
 
 function love.quit()
@@ -17,8 +16,6 @@ end
 
 function love.load()
     Blox2D.load()
-    --local brickColor = BrickColor.new("Bright red")
-    --table.print(brickColor)
 
     local model = Instance.new("Model", workspace)
 
@@ -31,8 +28,6 @@ function love.load()
         part.Parent = model--parent
     end
 
-    
-
     local model2 = Instance.new("Model", model)
     local part = Instance.new("BasePart")
     part.Position = Vector2.new(0, 105)
@@ -42,7 +37,9 @@ function love.load()
 
     model:MoveTo(Vector2.new(100, 400))
 
-    workspace.CurrentCamera.Position = Vector2.new(200, 0)
+    workspace.CurrentCamera.Position = Vector2.new(000, 0)
+
+    --local zeroPart = Instance.new("BasePart", workspace)
 
     local UserInputService = game:GetService("UserInputService")
     local testInputObject
@@ -56,13 +53,18 @@ function love.load()
             print(testInputObject.UserInputState.Name)
         end
     end)
-    --print(Enum.KeyCode.Zero.Name, Enum.KeyCode.Zero.Value, Enum.KeyCode[48].Value)
-    --local clone = part:Clone()
-    --clone.Position = clone.Position+Vector2.new(300, 0)
-    --[[local runservice = game:GetService("Run Service")
-    --table.print(runservice)
-    print(runservice)
-    runservice.PreRender:Connect(function ()
-        print("prerender")
-    end)--]]
+
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Parent = game.Players.LocalPlayer.PlayerGui
+
+    local frame = Instance.new("Frame")
+    frame.BorderSizePixel = 1
+    frame.Parent = screenGui
+
+    local RunService = game:GetService("RunService")
+    RunService.Heartbeat:Connect(function(dt)
+        workspace.Model.BasePart.Rotation = workspace.Model.BasePart.Rotation+dt*45
+        frame.Rotation = frame.Rotation+dt*45
+        frame.Position = frame.Position+UDim2.new(0,0,0,5)
+    end)
 end

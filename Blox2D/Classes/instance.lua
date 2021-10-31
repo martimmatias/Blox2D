@@ -225,7 +225,7 @@ end
 local metatable = {
     __index = function (tbl, key)
         if InstanceTable.__getters[key] then
-            return InstanceTable.__getters[key]()
+            return InstanceTable.__getters[key](tbl)
         end
         return rawget(tbl, "_"..key) or InstanceTable[key] or tbl:FindFirstChild(key)
     end,
@@ -279,6 +279,9 @@ Instance.new = function (className, parent)
 end
 
 function _Inherit(parentClass, newClassName, __getters_metatable, __setters_metatable)
+    if not parentClass or not newClassName then
+        error()
+    end
     local newClass = {}
     newClass._Table = setmetatable({
         __type = parentClass._Table.__type,
@@ -288,7 +291,6 @@ function _Inherit(parentClass, newClassName, __getters_metatable, __setters_meta
 
     local Table = newClass._Table
     local getters = Table.__getters
-
     newClass.__getters_metatable = __getters_metatable or {__index = Table.__getters}
     newClass.__setters_metatable = __setters_metatable or {__index = Table.__setters}
 
@@ -296,7 +298,7 @@ function _Inherit(parentClass, newClassName, __getters_metatable, __setters_meta
     newClass._metatable = {
         __index = function (tbl, key)
             if getters[key] then
-                return getters[key]()
+                return getters[key](tbl)
             end
             return rawget(tbl, "_"..key) or Table[key] or Instance._Table.FindFirstChild(tbl, key)
             --tbl:FindFirstChild(key)

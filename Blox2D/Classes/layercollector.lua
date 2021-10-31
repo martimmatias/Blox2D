@@ -1,5 +1,4 @@
 local Class, Table, getters, setters, newFunc = _Inherit(require("Blox2D.Classes.guibase2d"), "LayerCollector")
-
 function setters:ResetOnSpawn(value)
     Check("Set(ResetOnSpawn)", "boolean", value, "value")
     self:Set("ResetOnSpawn", value)
@@ -16,11 +15,10 @@ end
 
 --_Objects is private
 function setters:Objects()
-    return
 end
 
 function Table:_Add(value)
-    Check("_Add()", "table", value, "value")
+    Check("_Add()", "table", value or 1, "value")
     if typeof(value) == "Instance" and value:IsA("GuiObject") then
         table.insert(self._Objects, value)
         return true
@@ -39,9 +37,9 @@ function Table:_Remove(value)
 end
 
 function Table:_Draw()
-    for i, guiObject in pairs(self._Objects) do
-        if guiObject._Visible == true then
-            
+    if self._Enabled then
+        for i, guiObject in pairs(self._Objects) do
+            guiObject:_Draw()
         end
     end
 end
