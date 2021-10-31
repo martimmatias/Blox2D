@@ -5,6 +5,14 @@ function setters:AutoLocalize(value)
     self:Set("AutoLocalize", value)
 end
 
+function setters:AbsolutePosition(value)
+    self:Set("AbsolutePosition", value)
+end
+
+function setters:AbsoluteSize(value)
+    self:Set("AbsoluteSize", value)
+end
+
 function getters:AbsolutePosition()
     return Vector2.new(self._AbsolutePosition.X, self._AbsolutePosition.Y)
 end
