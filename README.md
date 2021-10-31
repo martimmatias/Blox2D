@@ -7,3 +7,5 @@ Currently has:
 - Several data types (including script signals),
 - Basic services,
 - Part rendering and draw order
+- Input Processing
+- UI rendering
