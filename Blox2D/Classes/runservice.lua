@@ -1,4 +1,4 @@
-local Class, Table, getters, setters, newFunc = _Inherit(Instance, "RunService", Instance.__getters_metatable, Instance.__setters_metatable)
+local Class, Table, getters, setters, newFunc = _Inherit(Instance, "RunService")
 --table.print(testClass)
 
 function Table:IsRunning()
