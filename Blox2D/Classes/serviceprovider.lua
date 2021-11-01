@@ -1,4 +1,4 @@
-local Class, Table, getters, setters, newFunc = _Inherit(Instance, "ServiceProvider", Instance.__getters_metatable, Instance.__setters_metatable)
+local Class, Table, getters, setters, newFunc = _Inherit(Instance, "ServiceProvider")
 
 Class._Services = {}
 
