@@ -160,7 +160,7 @@ function Table:_Draw()
         local size = self._AbsoluteSize
         local position = self._AbsolutePosition
         
-        if rot ~= 0 then
+        if self._AbsoluteRotation ~= 0 then
             local parentSize = self._Parent._AbsoluteSize
             local parentPosition = self._Parent._AbsolutePosition
             local parentCenterX = parentPosition.X+parentSize.X/2
@@ -171,8 +171,7 @@ function Table:_Draw()
             love.graphics.translate(-parentCenterX, -parentCenterY)
         end
 
-        love.graphics.translate(position.X, position.Y)
-        love.graphics.translate(size.X/2, size.Y/2)
+        love.graphics.translate(position.X+size.X/2, position.Y+size.Y/2)
         love.graphics.rotate(math.rad(rawget(self, "_Rotation")))
         love.graphics.translate(-size.X/2, -size.Y/2)
 
