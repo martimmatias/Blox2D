@@ -11,13 +11,12 @@ local InstanceTemplate = {
     _Name = "Instance",
     _Children = {}
 }
---memory microoptimization cus of string
-InstanceTemplate._ClassNames = {InstanceTemplate._Name}
 
 local InstanceTable = {
     __type = "Instance",
     __setters = {},
     __getters = {},
+    _ClassNames = {"Instance"}
 }
 Instance._Table = InstanceTable
 Instance.__getters_metatable = {__index = InstanceTable.__getters}
@@ -54,7 +53,7 @@ function InstanceTable.__getters:Children()
     return DeepCopy(rawget(self, "_Children"))
 end
 function InstanceTable.__getters:ClassName()
-    local classNames = rawget(self, "_ClassNames")
+    local classNames = self._ClassNames
     return rawget(classNames, #classNames)
 end
 
@@ -243,23 +242,6 @@ local metatable = {
 }
 Instance._metatable = metatable
 
---[[Instance.new = function(className, parent)
-    local instance = DeepCopy(InstanceTemplate)
-    rawset(instance, "Changed", ScriptSignal.new())
-    rawset(instance, "ChildAdded", ScriptSignal.new())
-    rawset(instance, "ChildRemoved", ScriptSignal.new())
-    rawset(instance, "AncestryChanged", ScriptSignal.new())
-    if className then
-        Dictionary[className].new(instance)
-    else
-        setmetatable(instance, metatable)
-    end
-    if type(parent) == "table" and typeof(parent) == "Instance" then
-        instance.Parent = parent
-    end
-    return instance
-end--]]
-
 Instance.new = function (className, parent)
     local instance
     if className ~= nil then
@@ -287,9 +269,11 @@ function _Inherit(parentClass, newClassName, __getters_metatable, __setters_meta
         __type = parentClass._Table.__type,
         __getters = setmetatable({}, parentClass.__getters_metatable),
         __setters = setmetatable({}, parentClass.__setters_metatable),
+        _ClassNames = DeepCopy(parentClass._Table._ClassNames)
     }, {__index = parentClass._Table})
 
     local Table = newClass._Table
+    table.insert(Table._ClassNames, newClassName)
     local getters = Table.__getters
     newClass.__getters_metatable = __getters_metatable or {__index = Table.__getters}
     newClass.__setters_metatable = __setters_metatable or {__index = Table.__setters}
@@ -311,7 +295,6 @@ function _Inherit(parentClass, newClassName, __getters_metatable, __setters_meta
     return newClass, Table, getters, Table.__setters, function ()
         local instance = parentClass.new()
         setmetatable(instance, newClass._metatable)
-        table.insert(instance._ClassNames, newClassName)
         rawset(instance, "_Name", newClassName)
         return instance
     end
