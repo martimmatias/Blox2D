@@ -23,6 +23,15 @@ function setters:AbsoluteSize(value)
     end
 end
 
+function setters:AbsoluteRotation(value)
+    self:Set("AbsoluteRotation", value)
+    for _, child in pairs(self._Children) do
+        if child:IsA("GuiObject") then
+            child:_AbsoluteRotationChanged()
+        end
+    end
+end
+
 function getters:AbsolutePosition()
     return Vector2.new(self._AbsolutePosition.X, self._AbsolutePosition.Y)
 end
@@ -30,8 +39,6 @@ end
 function getters:AbsoluteSize()
     return Vector2.new(self._AbsoluteSize.X, self._AbsoluteSize.Y)
 end
-
-
 
 Class.new = function()
     local instance = newFunc()

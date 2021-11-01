@@ -29,6 +29,14 @@ local function UpdatePosition(self, udim2)
     end
 end
 
+local function UpdateRotation(self, value)
+    if self._Parent then
+        local parentRot = self._Parent._AbsoluteRotation
+        self.AbsoluteRotation = value+parentRot
+        return true
+    end
+end
+
 function setters:Parent(value)
     --default parent implementation
     Instance._Table.__setters.Parent(self, value)
@@ -48,6 +56,7 @@ function setters:Parent(value)
         layerCollector:_Add(self)
         UpdateSize(self, self._Size)
         UpdatePosition(self, self._Position)
+        UpdateRotation(self, self._Rotation)
     end
     rawset(self, "_Layer", layerCollector)
 end
@@ -70,6 +79,7 @@ end
 function setters:Rotation(value)
     Check("Set(Rotation)", "number", value, "value")
     self:Set("Rotation", value)
+    return UpdateRotation(self, value)
 end
 
 function setters:BorderSizePixel(value)
@@ -115,6 +125,15 @@ function Table:_AbsolutePositionChanged()
     end
 end
 
+function Table:_AbsoluteRotationChanged()
+    UpdateRotation(self, self._Rotation)
+    for _, child in pairs(self._Children) do
+        if child:IsA("GuiObject") then
+            child:_AbsoluteRotationChanged()
+        end
+    end
+end
+
 function Table:_AncestryChanged(child, parent)
     Instance._Table._AncestryChanged(self, child, parent)
 
@@ -141,10 +160,23 @@ function Table:_Draw()
         local size = self._AbsoluteSize
         local position = self._AbsolutePosition
         
+        if rot ~= 0 then
+            local parentSize = self._Parent._AbsoluteSize
+            local parentPosition = self._Parent._AbsolutePosition
+            local parentCenterX = parentPosition.X+parentSize.X/2
+            local parentCenterY = parentPosition.Y+parentSize.Y/2
+
+            love.graphics.translate(parentCenterX, parentCenterY)
+            love.graphics.rotate(math.rad(self._Parent._AbsoluteRotation))
+            love.graphics.translate(-parentCenterX, -parentCenterY)
+        end
+
         love.graphics.translate(position.X, position.Y)
         love.graphics.translate(size.X/2, size.Y/2)
         love.graphics.rotate(math.rad(rawget(self, "_Rotation")))
         love.graphics.translate(-size.X/2, -size.Y/2)
+
+        
         --outline
         if rawget(self, "_BorderSizePixel") > 0 then
             love.graphics.push()

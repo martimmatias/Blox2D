@@ -60,6 +60,7 @@ function love.load()
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(.5,50,.5,50)
     frame.BorderSizePixel = 1
+    frame.Rotation = 0
     frame.Parent = screenGui
 
     local frame2 = Instance.new("Frame")
@@ -70,7 +71,7 @@ function love.load()
     local RunService = game:GetService("RunService")
     RunService.Heartbeat:Connect(function(dt)
         workspace.Model.BasePart.Rotation = workspace.Model.BasePart.Rotation+dt*45
-        --frame.Rotation = frame.Rotation+dt*45
-        frame.Position = frame.Position+UDim2.new(0,0,0,5)
+        frame.Rotation = frame.Rotation+dt*45
+        --frame.Position = frame.Position+UDim2.new(0,0,0,1)
     end)
 end
