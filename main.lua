@@ -58,15 +58,14 @@ function love.load()
     screenGui.Parent = game.Players.LocalPlayer.PlayerGui
 
     local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(.5,50,.5,50)
+    frame.Size = UDim2.new(0.5,0,0.5,0)
     frame.BorderSizePixel = 1
-    frame.Rotation = 0
     frame.Parent = screenGui
 
-    local frame2 = Instance.new("Frame")
+    --[[local frame2 = Instance.new("Frame")
     frame2.Size = UDim2.new(.5,0,.5,0)
     frame2.BackgroundColor3 = Color3.new(1,0,0)
-    frame2.Parent = frame
+    frame2.Parent = frame--]]
 
     local RunService = game:GetService("RunService")
     RunService.Heartbeat:Connect(function(dt)
