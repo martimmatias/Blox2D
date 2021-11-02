@@ -272,6 +272,8 @@ Class.new = function()
     rawset(instance, "_Rotation", 0)
     rawset(instance, "_Visible", true)
     rawset(instance, "_ZIndex", 0)
+    rawset(instance, "MouseEnter", ScriptSignal.new())
+    rawset(instance, "MouseLeave", ScriptSignal.new())
 
     instance.Size = UDim2.fromOffset(200, 100)
     instance.Position = UDim2.new()
