@@ -148,6 +148,11 @@ love.mousereleased = Blox2D.mousereleased
 
 Blox2D.mousemoved = function (x, y, dx, dy, isTouch)
     Blox2D.Input.mousemoved(x, y, dx, dy, isTouch)
+    for _, screenGui in pairs(Players.LocalPlayer.PlayerGui._Children) do
+        if screenGui:IsA("ScreenGui") then
+            screenGui:_OnMouseMoved(x, y, dx, dy, isTouch)
+        end
+    end
 end
 love.mousemoved = Blox2D.mousemoved
 
