@@ -3,6 +3,7 @@ local GlobalZIndex = Enum.ZIndexBehavior.Global
 local SiblingZIndex = Enum.ZIndexBehavior.Sibling
 local OrderDraw = Blox2D.OrderDraw
 local OrderDrawGuiObject = Blox2D.OrderDrawGuiObject
+local ToRads = math.rad
 --_Layer is private
 function getters:Layer()
     return nil
@@ -201,12 +202,12 @@ function Table:_Draw(siblingMode)
             local parentCenterY = parentPosition.Y+parentSize.Y/2
 
             love.graphics.translate(parentCenterX, parentCenterY)
-            love.graphics.rotate(math.rad(self._Parent._AbsoluteRotation))
+            love.graphics.rotate(ToRads(self._Parent._AbsoluteRotation))
             love.graphics.translate(-parentCenterX, -parentCenterY)
         end
 
         love.graphics.translate(position.X+size.X/2, position.Y+size.Y/2)
-        love.graphics.rotate(math.rad(rawget(self, "_Rotation")))
+        love.graphics.rotate(ToRads(rawget(self, "_Rotation")))
         love.graphics.translate(-size.X/2, -size.Y/2)
 
         
@@ -246,10 +247,9 @@ function Table:_Draw(siblingMode)
             size.X,
             size.Y
         )
-        
-        
-        love.graphics.pop()
 
+        love.graphics.pop()
+        
         if siblingMode == true then
             for i, child in pairs(rawget(self, "_Children")) do
                 if child._Draw ~= nil then
