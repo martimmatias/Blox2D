@@ -24,8 +24,16 @@ local InputObjects = {}
 
 Blox2D._Draw = ScriptSignal.new()
 
-local function OrderDraw(instanceA, instanceB)
+function Blox2D.OrderDraw(instanceA, instanceB)
     return rawget(instanceA, "_ZIndex") < rawget(instanceB, "_ZIndex")
+end
+local OrderDraw = Blox2D.OrderDraw
+function Blox2D.OrderDrawGuiObject(instanceA, instanceB)
+    if instanceA:IsA("GuiObject") and instanceB:IsA("GuiObject") then
+        return OrderDraw(instanceA, instanceB)
+    else
+        return false
+    end
 end
 
 function Blox2D._AddToDrawOrder(instance)

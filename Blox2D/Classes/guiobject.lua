@@ -1,5 +1,8 @@
 local Class, Table, getters, setters, newFunc = _Inherit(require("Blox2D.Classes.guibase2d"), "GuiObject")
-
+local GlobalZIndex = Enum.ZIndexBehavior.Global
+local SiblingZIndex = Enum.ZIndexBehavior.Sibling
+local OrderDraw = Blox2D.OrderDraw
+local OrderDrawGuiObject = Blox2D.OrderDrawGuiObject
 --_Layer is private
 function getters:Layer()
     return nil
@@ -52,11 +55,16 @@ function setters:Parent(value)
         end
     end
     --new parent is descendant of workspace, old parent wasn't
-    if value ~= nil and layerCollector ~= nil then
-        layerCollector:_Add(self)
-        UpdateSize(self, self._Size)
-        UpdatePosition(self, self._Position)
-        UpdateRotation(self, self._Rotation)
+    if value ~= nil then
+        if layerCollector ~= nil then
+            layerCollector:_Add(self)
+            UpdateSize(self, self._Size)
+            UpdatePosition(self, self._Position)
+            UpdateRotation(self, self._Rotation)
+        end
+        if value:IsA("GuiObject") then
+            value:_ReOrder()
+        end
     end
     rawset(self, "_Layer", layerCollector)
 end
@@ -101,6 +109,27 @@ function setters:BorderColor3(color)
     end
 end
 
+function setters:Visible(bool)
+    Check("Set(Visible)", "boolean", bool, "bool")
+    self:Set("Visible", bool)
+end
+
+function setters:ZIndex(num)
+    Check("Set(ZIndex)", "number", num, "num")
+    local old = self._ZIndex
+    self:Set("ZIndex", num)
+    if old ~= num then
+        local parent = self._Parent
+        local layerCollector = self._Layer
+        if parent ~= nil and parent:IsA("GuiObject") then
+            parent:_ReOrder()
+        end
+        if layerCollector ~= nil and layerCollector.ZIndexBehavior == GlobalZIndex then
+            layerCollector:_ReOrder()
+        end
+    end
+end
+
 local destroyFunc = Table.Destroy
 function Table:Destroy()
     destroyFunc(self)
@@ -134,8 +163,13 @@ function Table:_AbsoluteRotationChanged()
     end
 end
 
+function Table:_ReOrder()
+    table.sort(self._Children, OrderDrawGuiObject)
+end
+
+local ancestryChangedFunc = Instance._Table._AncestryChanged
 function Table:_AncestryChanged(child, parent)
-    Instance._Table._AncestryChanged(self, child, parent)
+    ancestryChangedFunc(self, child, parent)
 
     local oldLayerCollector = rawget(self, "_Layer")
     local layerCollector = self:FindFirstAncestorOfClass("LayerCollector")
@@ -153,7 +187,7 @@ function Table:_AncestryChanged(child, parent)
     end
 end
 
-function Table:_Draw()
+function Table:_Draw(siblingMode)
     if self._Visible == true then
         love.graphics.push()
 
@@ -216,9 +250,11 @@ function Table:_Draw()
         
         love.graphics.pop()
 
-        for i, child in pairs(rawget(self, "_Children")) do
-            if child._Draw ~= nil then
-                child:_Draw()
+        if siblingMode == true then
+            for i, child in pairs(rawget(self, "_Children")) do
+                if child._Draw ~= nil then
+                    child:_Draw()
+                end
             end
         end
     end
