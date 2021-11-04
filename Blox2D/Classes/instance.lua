@@ -50,7 +50,11 @@ function InstanceTable.__setters:Name(value)
     self:Set("Name", value)
 end
 function InstanceTable.__getters:Children()
-    return DeepCopy(rawget(self, "_Children"))
+    local shallowCopy = {}
+    for i, child in pairs(rawget(self, "_Children")) do
+        shallowCopy[i] = v
+    end
+    return shallowCopy
 end
 function InstanceTable.__getters:ClassName()
     local classNames = self._ClassNames
